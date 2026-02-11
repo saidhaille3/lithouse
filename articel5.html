@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+      .fire-text {
+          background: url('/images/flame.mov') center center / cover no-repeat;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+      
+      body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #111111; }
+      
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      .silver-nav {
+        background: linear-gradient(135deg, #e2e2e2 0%, #ffffff 50%, #cfcfcf 100%);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+      }
+
+      .nav-scrolled {
+        background: linear-gradient(135deg, rgba(226, 226, 226, 0.8) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(207, 207, 207, 0.8) 100%);
+        backdrop-filter: blur(8px);
+      }
+
+      /* Essential Flip CSS */
+      .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+      
+      .is-flipped .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .backface-hidden {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .rotate-y-180 { transform: rotateY(180deg); }
+      .gold-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F9E2AF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+<nav id="navbar" class="fixed top-0 w-full z-50 silver-nav px-4 md:px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-4 md:gap-8">
+        <img src="/images/logo1.png" alt="The Lithouse Logo" class="h-7 md:h-9 w-auto" />
+        <span class="fire-text text-lg md:text-[1.325rem] font-extrabold tracking-tight leading-[1] relative -top-[1px] md:-top-[2.2px]">
+            Lithouse
+        </span>
+    </div>
+    
+    <div class="hidden md:flex gap-6 text-sm font-semibold tracking-widest uppercase opacity-70">
+        <a href="#" class="hover:text-amber-500 transition text-black">NFL</a>
+        <a href="#" class="hover:text-amber-500 transition text-black">NBA</a>
+        <a href="#" class="hover:text-amber-500 transition text-black">Boxing</a>
+        <a href="#" class="hover:text-amber-500 transition text-black">Live</a>
+    </div>
+    
+    <div class="flex items-center gap-4">
+        <button class="hidden sm:block bg-black text-white px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md">Subscribe</button>
+        <button onclick="toggleSidebar()" class="text-xl md:text-2xl focus:outline-none text-black">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+    </div>
+</nav>
+
+<div id="sidebar" class="fixed inset-y-0 right-0 w-full md:w-80 bg-black z-[60] transform translate-x-full transition-transform duration-500 ease-in-out p-10">
+    <div class="flex justify-end">
+        <button onclick="toggleSidebar()" class="text-3xl text-white">&times;</button>
+    </div>
+    <div class="flex flex-col gap-8 mt-12 text-3xl md:text-4xl font-bold uppercase tracking-tighter text-white">
+        <a href="#" onclick="toggleSidebar()">NFL</a>
+        <a href="#" onclick="toggleSidebar()">NBA</a>
+        <a href="#" onclick="toggleSidebar()">Boxing</a>
+        <a href="#" onclick="toggleSidebar()" class="gold-gradient">Premium +</a>
+    </div>
+</div>
+
+<header class="relative pt-28 md:pt-32 pb-12 md:pb-20 px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
+    <div class="absolute top-20 right-0 w-64 md:w-96 h-64 md:h-96 bg-blue-100 rounded-full blur-[80px] md:blur-[120px] opacity-60"></div>
+    <div class="relative z-10">
+        <span class="text-blue-600 font-bold tracking-[0.3em] md:tracking-[0.4em] text-[9px] md:text-[10px] uppercase mb-4 block">Exclusive 2026 Market Forecast</span>
+        <h1 class="text-5xl md:text-7xl lg:text-9xl font-black  leading-[0.95] md:leading-[0.9] mb-6 text-slate-900 uppercase">
+            THE BILLION <br> <span class="text-slate-300">DOLLAR CLASS</span>
+        </h1>
+        <p class="max-w-2xl text-base md:text-lg text-slate-500 leading-relaxed font-light">
+            With a projected 2026 salary cap of <span class="text-slate-900 font-bold underline decoration-blue-500 decoration-2 underline-offset-4">$303.5 Million</span>, we rank the game-changers.
+        </p>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 md:px-8 pb-40">
+
+    <section class="mb-16 md:mb-24">
+        <h3 class="text-[10px] md:text-sm font-black tracking-[0.3em] uppercase mb-8 text-slate-400 border-b border-slate-100 pb-2 flex justify-between items-center whitespace-nowrap">
+            Tier 1: Franchise Pillars
+        </h3>
+        <div class="flex overflow-x-auto gap-4 md:gap-8 pb-4 no-scrollbar snap-x">
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 shadow-xl overflow-hidden bg-slate-200">
+                        <img src="images/tyler.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-purple-800/90 via-purple-600/40"></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-white/70 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-4xl md:text-5xl font-black  opacity-30">5</span>
+                                <h2 class="text-xl md:text-2xl font-black uppercase  mt-8">Tyler <br> Linderbaum</h2>
+                                <p class="text-[9px] md:text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">C / Proj. $21M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-slate-900 p-8 text-white flex flex-col border border-purple-500/30">
+                        <h4 class="text-purple-400 font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-slate-500 uppercase border-b border-white/10"><th class="py-3">Year</th><th>Sacks</th><th>Grade</th><th>Pen</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2025</td><td class="font-bold">0</td><td>91.4</td><td>1</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2024</td><td class="font-bold">1</td><td>88.2</td><td>2</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2023</td><td class="font-bold">0</td><td>78.3</td><td>3</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2022</td><td class="font-bold">2</td><td>74.7</td><td>5</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2021</td><td class="font-bold">0</td><td>95.4</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 shadow-xl overflow-hidden bg-slate-200">
+                        <img src="images/pickens.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-700/90 via-blue-500/40"></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-white/70 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-4xl md:text-5xl font-black  opacity-30">4</span>
+                                <h2 class="text-xl md:text-2xl font-black uppercase  mt-8">George <br> Pickens</h2>
+                                <p class="text-[9px] md:text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">WR / Proj. $28.5M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-slate-900 p-8 text-white flex flex-col border border-blue-500/30">
+                        <h4 class="text-blue-400 font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-slate-500 uppercase border-b border-white/10"><th class="py-3">Year</th><th>Yards</th><th>YPC</th><th>TDs</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2025</td><td class="font-bold">1,429</td><td>15.4</td><td>9</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2024</td><td class="font-bold">900</td><td>15.3</td><td>3</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2023</td><td class="font-bold">1,140</td><td>18.1</td><td>5</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2022</td><td class="font-bold">801</td><td>15.4</td><td>4</td></tr>
+                            <tr class="border-b border-white/5">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 shadow-xl overflow-hidden bg-slate-200">
+                        <img src="images/hender.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-amber-500/90 via-amber-200/40 "></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-black/50 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-slate-900">
+                            <div><span class="text-4xl md:text-5xl font-black  opacity-30">3</span>
+                                <h2 class="text-lg md:text-xl font-black uppercase  mt-8">Trey <br> Hendrickson</h2>
+                                <p class="text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">EDGE / Proj. $31.5M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-amber-500 p-8 text-black flex flex-col border border-black/20">
+                        <h4 class="font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-amber-900 uppercase border-b border-black/20"><th class="py-3">Year</th><th>Sacks</th><th>Press</th><th>FF</th></tr>
+                            <tr class="border-b border-black/10"><td class="py-3 opacity-60">2025</td><td class="font-bold">4.0</td><td>23</td><td>1</td></tr>
+                            <tr class="border-b border-black/10"><td class="py-3 opacity-60">2024</td><td class="font-bold">17.5</td><td>82</td><td>2</td></tr>
+                            <tr class="border-b border-black/10"><td class="py-3 opacity-60">2023</td><td class="font-bold">17.5</td><td>79</td><td>3</td></tr>
+                            <tr class="border-b border-black/10"><td class="py-3 opacity-60">2022</td><td class="font-bold">8.0</td><td>65</td><td>3</td></tr>
+                            <tr class="border-b border-black/10"><td class="py-3 opacity-60">2021</td><td class="font-bold">14.0</td><td>75</td><td>3</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start relative w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white/40 backdrop-blur-md">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 text-white shadow-xl"><i class="fa-solid fa-lock text-xl"></i></div>
+                    <h4 class="text-xl font-black  uppercase text-slate-900"> #2 Hidden</h4>
+                    <button class="mt-4 bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">Subscribe</button>
+                </div>
+            </div>
+
+            <div class="snap-start relative w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white/40 backdrop-blur-md">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 text-white shadow-xl"><i class="fa-solid fa-lock text-xl"></i></div>
+                    <h4 class="text-xl font-black  uppercase text-slate-900"> #1 Hidden</h4>
+                    <button class="mt-4 bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">Subscribe</button>
+                </div>
+            </div>        </div>
+    </section>
+
+    <section class="mb-16 md:mb-24">
+        <h3 class="text-[10px] md:text-sm font-black tracking-[0.3em] uppercase mb-8 text-slate-400 border-b border-slate-100 pb-2 flex justify-between items-center whitespace-nowrap">Tier 2: Market Movers</h3>
+        <div class="flex overflow-x-auto gap-4 md:gap-8 pb-4 no-scrollbar snap-x">
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 bg-slate-200 overflow-hidden">
+                        <img src="images/wyy.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-orange-800/90 via-orange-600/40"></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-white/70 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-5xl font-black  opacity-30">10</span>
+                                <h2 class="text-2xl font-black uppercase  mt-8">Wyatt <br> Teller</h2>
+                                <p class="text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">G / Proj. $14.5M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-slate-900 p-8 text-white flex flex-col border border-orange-500/30">
+                        <h4 class="text-orange-400 font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-slate-500 uppercase border-b border-white/10"><th class="py-3">Year</th><th>Block %</th><th>Sacks</th><th>GS</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2025</td><td class="font-bold">92%</td><td>0</td><td>13</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2024</td><td class="font-bold">89%</td><td>2</td><td>13</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2023</td><td class="font-bold">91%</td><td>1</td><td>16</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2022</td><td class="font-bold">87%</td><td>3</td><td>15</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-400">2021</td><td class="font-bold">93%</td><td>1</td><td>17</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 bg-slate-200 overflow-hidden">
+                        <img src="images/breece.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-700/90 via-emerald-500/40"></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-white/70 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-5xl font-black  opacity-30">09</span>
+                                <h2 class="text-2xl font-black uppercase  mt-8">Breece <br> Hall</h2>
+                                <p class="text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">RB / Proj. $18.5M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-emerald-950 p-8 text-white flex flex-col border border-emerald-500/30">
+                        <h4 class="text-emerald-400 font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-slate-400 uppercase border-b border-white/10"><th class="py-3">Year</th><th>Yards</th><th>YPC</th><th>TDs</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2025</td><td class="font-bold">1,065</td><td>4.4</td><td>4</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2024</td><td class="font-bold">876</td><td>4.2</td><td>5</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2023</td><td class="font-bold">994</td><td>4.5</td><td>5</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2022</td><td class="font-bold">463</td><td>5.8</td><td>4</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2021</td><td class="font-bold">774</td><td>5.8</td><td>3</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-100 bg-slate-200 overflow-hidden">
+                        <img src="images/kyle.png" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-700/40"></div>
+                        <div class="absolute bottom-4 right-4 animate-pulse z-20"><i class="fa-solid fa-rotate text-white/70 text-sm"></i></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-5xl font-black  opacity-30">08</span>
+                                <h2 class="text-2xl font-black uppercase  mt-8">Kyle <br> Hamilton</h2>
+                                <p class="text-[10px] font-black uppercase tracking-widest mt-3 opacity-80">S / Proj. $25.1M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 rounded-2xl bg-purple-950 p-8 text-white flex flex-col border border-purple-500/30">
+                        <h4 class="text-purple-400 font-black uppercase text-[10px] tracking-widest mb-6 ">STATS</h4>
+                        <table class="w-full text-[10px] text-left border-collapse">
+                            <tr class="text-slate-400 uppercase border-b border-white/10"><th class="py-3">Year</th><th>Tkls</th><th>PBU</th><th>TDs</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2025</td><td class="font-bold">105</td><td>9</td><td>0</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2024</td><td class="font-bold">107</td><td>9</td><td>0</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2023</td><td class="font-bold">81</td><td>13</td><td>1</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2022</td><td class="font-bold">62</td><td>5</td><td>0</td></tr>
+                            <tr class="border-b border-white/5"><td class="py-3 text-slate-300">2021</td><td class="font-bold">34</td><td>4</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="snap-start relative w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white/40 backdrop-blur-md">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 text-white shadow-xl"><i class="fa-solid fa-lock text-xl"></i></div>
+                    <h4 class="text-xl font-black  uppercase text-slate-900"> #7 Hidden</h4>
+                    <button class="mt-4 bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">Subscribe</button>
+                </div>
+            </div>
+            <div class="snap-start relative w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white/40 backdrop-blur-md">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 text-white shadow-xl"><i class="fa-solid fa-lock text-xl"></i></div>
+                    <h4 class="text-xl font-black  uppercase text-slate-900"> #6 Hidden</h4>
+                    <button class="mt-4 bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">Subscribe</button>
+                </div>
+            </div>        </div>
+    </section>
+
+<section class="mb-16 md:mb-24">
+        <h3 class="text-[10px] md:text-sm font-black tracking-[0.3em] uppercase mb-8 text-slate-400 border-b border-slate-100 pb-2 whitespace-nowrap">Tier 3: Core Starters</h3>
+        <div class="flex overflow-x-auto gap-4 md:gap-8 pb-4 no-scrollbar snap-x">
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden">
+                        <img src="images/dev.png" class="absolute inset-0 w-full h-full object-cover opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-6xl font-black  opacity-20">15</span>
+                                <h2 class="text-3xl font-black uppercase  mt-4 leading-none">Devin <br> Lloyd</h2>
+                                <p class="text-[10px] font-bold tracking-widest text-blue-400 mt-2 uppercase">Linebacker / Proj. $9.5M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 bg-slate-900 rounded-2xl p-8 text-white border border-blue-500/20">
+                        <h4 class="text-blue-400 font-black uppercase text-[10px] mb-6  tracking-widest">Performance Metrics</h4>
+                        <table class="w-full text-[11px] text-left border-collapse">
+                            <tr class="text-slate-500 uppercase border-b border-white/10"><th class="py-3">Season</th><th>Tkls</th><th>INTs</th><th>TDs</th></tr>
+                            <tr class="border-b border-white/5"><td>2025</td><td class="font-bold text-blue-300">81</td><td>5</td><td>1</td></tr>
+                            <tr class="border-b border-white/5"><td>2024</td><td class="font-bold">113</td><td>1</td><td>0</td></tr>
+                            <tr class="border-b border-white/5"><td>2023</td><td class="font-bold">127</td><td>0</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden">
+                        <img src="images/jak.png" class="absolute inset-0 w-full h-full object-cover opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
+                        <div class="relative h-full p-8 flex flex-col justify-between text-white">
+                            <div><span class="text-6xl font-black  opacity-20">14</span>
+                                <h2 class="text-3xl font-black uppercase  mt-4 leading-none">Jakobi <br> Meyers</h2>
+                                <p class="text-[10px] font-bold tracking-widest text-blue-400 mt-2 uppercase">Wide Receiver / Proj. $11M AAV</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 bg-slate-900 rounded-2xl p-8 text-white border border-blue-500/20">
+                        <h4 class="text-blue-400 font-black uppercase text-[10px] mb-6  tracking-widest">Performance Metrics</h4>
+                        <table class="w-full text-[11px] text-left border-collapse">
+                            <tr class="text-slate-500 uppercase border-b border-white/10"><th class="py-3">Season</th><th>Yards</th><th>REC</th><th>TDs</th></tr>
+                            <tr class="border-b border-white/5"><td>2025</td><td class="font-bold text-blue-300">835</td><td>75</td><td>3</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start relative w-[80vw] sm:w-[340px] h-[450px] md:h-[480px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white/40 backdrop-blur-md">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 text-white shadow-xl"><i class="fa-solid fa-lock text-xl"></i></div>
+                    <h4 class="text-xl font-black  uppercase text-slate-900"> #12 Hidden</h4>
+                    <button class="mt-4 bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+    <section class="mb-16 md:mb-24">
+        <h3 class="text-[10px] md:text-sm font-black tracking-[0.3em] uppercase mb-8 text-slate-400 border-b border-slate-100 pb-2">Tier 4: Value Depth</h3>
+        <div class="flex overflow-x-auto gap-4 md:gap-8 pb-4 no-scrollbar snap-x">
+            <div class="snap-start group w-[70vw] sm:w-[340px] h-[300px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-xl border border-slate-300 bg-gradient-to-br from-slate-50 to-slate-200 overflow-hidden shadow-lg p-6">
+                        <img src="images/dob.png" class="absolute inset-0 w-full h-full object-cover opacity-100 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-white/80"></div>
+                        <div class="relative h-full flex flex-col justify-between">
+                            <div>
+                                <span class="text-4xl font-black  text-slate-900/10">20</span>
+                                <h2 class="text-2xl font-black uppercase leading-none mt-2 text-slate-900">J.K. <br> Dobbins</h2>
+                            </div>
+                            <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full w-fit">
+                                <span class="relative flex h-2 w-2">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <span class="text-[9px] font-black uppercase tracking-widest">Hh ROI Potential</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 bg-slate-100 rounded-xl p-6 text-slate-900 border border-slate-300">
+                        <h4 class="text-emerald-600 font-black uppercase text-[9px] mb-4  tracking-widest">Efficiency Stats</h4>
+                        <table class="w-full text-[10px] text-left">
+                            <tr class="border-b border-slate-300"><td>2025 Yds</td><td class="font-bold py-2">520</td></tr>
+                            <tr class="border-b border-slate-300"><td>YPC</td><td class="font-bold py-2">4.6</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snap-start group w-[70vw] sm:w-[340px] h-[300px] flex-shrink-0" style="perspective: 2000px;" onclick="toggleFlip(this)">
+                <div class="card-inner">
+                    <div class="backface-hidden rounded-xl border border-slate-300 bg-gradient-to-br from-slate-50 to-slate-200 overflow-hidden shadow-lg p-6">
+                        <img src="images/wing.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-100 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-white/80"></div>
+                        <div class="relative h-full flex flex-col justify-between">
+                            <div>
+                                <span class="text-4xl font-black  text-slate-900/10">19</span>
+                                <h2 class="text-2xl font-black uppercase leading-none mt-2 text-slate-900">Andrew <br> Wingard</h2>
+                            </div>
+                            <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full w-fit">
+                                <span class="text-[9px] font-black uppercase tracking-widest">Special Teams Ace</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="backface-hidden rotate-y-180 bg-slate-100 rounded-xl p-6 text-slate-900 border border-slate-300">
+                        <h4 class="text-blue-600 font-black uppercase text-[9px] mb-4  tracking-widest">Efficiency Stats</h4>
+                        <table class="w-full text-[10px] text-left">
+                            <tr class="border-b border-slate-300"><td>2025 Tkls</td><td class="font-bold py-2">84</td></tr>
+                            <tr class="border-b border-slate-300"><td>INT</td><td class="font-bold py-2">1</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                    <div class="snap-start relative w-[70vw] sm:w-[340px] h-[300px] md:h-[300px] flex-shrink-0 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden shadow-sm">
+            <div class="absolute inset-0 bg-white/40 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-lock text-slate-300 text-sm"></i>
+                </div>
+                <span class="text-[10px] font-black uppercase text-slate-500 tracking-tighter"> #16</span>
+                <button class="bg-black text-white px-5 py-2 mt-3 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors duration-300">Subscribe</button>
+            </div>
+        </div>
+        </div>
+    </section>
+    <div class="mt-24">
+        <h3 class="heading-font text-2xl uppercase tracking-widest mb-8 flex items-center gap-4 text-slate-900">
+            Cap Space Leaders <span class="h-px flex-1 bg-slate-200"></span>
+        </h3>
+        <div class="overflow-x-auto glass-card rounded-xl">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-100 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">
+                        <th class="px-8 py-6">Organization</th>
+                        <th class="px-8 py-6 text-right">Proj. Cap Space</th>
+                        <th class="px-8 py-6">Primary Need</th>
+                        <th class="px-8 py-6 text-center">Leverage Index</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-4">
+                            <div class="w-12 h-12 rounded-full bg-white border border-slate-100 p-1.5 shadow-sm flex items-center justify-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Tennessee_Titans_logo.svg/100px-Tennessee_Titans_logo.svg.png" alt="TEN" class="w-full h-full object-contain">
+                            </div>
+                        </td>
+                        <td class="px-8 py-4 text-right text-emerald-600 font-bold text-base">$104.7M</td>
+                        <td class="px-8 py-4 text-slate-500 font-medium tracking-tight">Roster Overhaul</td>
+                        <td class="px-8 py-4 text-center font-black text-yellow-600 italic">ELITE</td>
+                    </tr>
+                    <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-4">
+                            <div class="w-12 h-12 rounded-full bg-white border border-slate-100 p-1.5 shadow-sm flex items-center justify-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Las_Vegas_Raiders_logo.svg/100px-Las_Vegas_Raiders_logo.svg.png" alt="LVR" class="w-full h-full object-contain">
+                            </div>
+                        </td>
+                        <td class="px-8 py-4 text-right text-emerald-600 font-bold text-base">$91.5M</td>
+                        <td class="px-8 py-4 text-slate-500 font-medium tracking-tight">Quarterback</td>
+                        <td class="px-8 py-4 text-center font-black text-orange-600 italic">HIGH</td>
+                    </tr>
+                    <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-4">
+                            <div class="w-12 h-12 rounded-full bg-white border border-slate-100 p-1.5 shadow-sm flex items-center justify-center">
+                                <img src="images/charge.png" alt="LAC" class="w-full h-full object-contain">
+                            </div>
+                        </td>
+                        <td class="px-8 py-4 text-right text-emerald-600 font-bold text-base">$83.5M</td>
+                        <td class="px-8 py-4 text-slate-500 font-medium tracking-tight">Skill Positions</td>
+                        <td class="px-8 py-4 text-center font-black text-lime-600 italic">HIGH</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-4">
+                            <div class="w-12 h-12 rounded-full bg-white border border-slate-100 p-1.5 shadow-sm flex items-center justify-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/New_York_Jets_logo.svg/100px-New_York_Jets_logo.svg.png" alt="NYJ" class="w-full h-full object-contain">
+                            </div>
+                        </td>
+                        <td class="px-8 py-4 text-right text-emerald-600 font-bold text-base">$83.2M</td>
+                        <td class="px-8 py-4 text-slate-500 font-medium tracking-tight">Secondary Retention</td>
+                        <td class="px-8 py-4 text-center font-black text-lime-600 italic">HIGH</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<footer class="bg-neutral-950 py-12 md:py-20 px-6 md:px-10 border-t border-white/5">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div>
+            <h4 class="text-white font-bold uppercase mb-4 md:mb-6 text-sm">Network</h4>
+            <ul class="text-gray-500 space-y-3 text-xs md:text-sm">
+                <li><a href="#" class="hover:text-white transition">Streaming</a></li>
+                <li><a href="#" class="hover:text-white transition">Analytic Lab</a></li>
+                <li><a href="#" class="hover:text-white transition">Sportsbook</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="mt-12 md:mt-20 pt-10 border-t border-white/5 text-[8px] md:text-[10px] uppercase tracking-widest text-gray-600 flex flex-col md:flex-row justify-between gap-4">
+        <p>&copy; 2026 Apex Sports Network. Global Rights Reserved.</p>
+        <p>Terms of Elite Membership</p>
+    </div>
+</footer>
+
+<script>
+    function toggleFlip(element) {
+        element.classList.toggle('is-flipped');
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('translate-x-full');
+    }
+
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            nav.classList.add('nav-scrolled');
+        } else {
+            nav.classList.remove('nav-scrolled');
+        }
+    });
+</script>
+</body>
+</html>

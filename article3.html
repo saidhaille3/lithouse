@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITHOUSE | Access Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; 
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* High-End Industrial Card */
+        .stadium-card {
+            background: rgba(10, 10, 10, 0.95);
+            border-top: 4px solid #fff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Input Styling - Pro Sports Standard */
+        .field-input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            transition: all 0.2s ease;
+            color: white;
+        }
+        .field-input:focus {
+            border-color: #fff;
+            background: #222;
+            outline: none;
+        }
+
+        /* Error States */
+        .error-border { border-color: #ef4444 !important; }
+        
+        .loading-shimmer {
+            background: linear-gradient(90deg, #fff, #ccc, #fff);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="w-full max-w-[450px] space-y-8">
+        
+        <div class="text-center">
+            <h1 class="text-5xl font-black italic tracking-tighter uppercase mb-2">Lithouse</h1>
+            <p class="text-[10px] font-bold tracking-[0.4em] text-white/40 uppercase">Global Sports Broadcasting Network</p>
+        </div>
+
+        <div class="stadium-card p-8 md:p-12 relative overflow-hidden">
+            
+            <div id="form-header" class="mb-10">
+                <h2 id="mode-title" class="text-2xl font-black uppercase tracking-tight">Member Login</h2>
+                <div class="h-1 w-12 bg-white mt-2"></div>
+            </div>
+
+            <form id="auth-form" class="space-y-5" novalidate>
+                <div id="name-group" class="hidden space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-white/50">Full Name</label>
+                    <input type="text" id="full-name" class="field-input w-full p-4 text-sm font-bold uppercase tracking-tight" placeholder="Ex: Julian Vante">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-white/50">Network ID (Email)</label>
+                    <input type="email" id="email" required class="field-input w-full p-4 text-sm font-bold" placeholder="name@lithouse.com">
+                    <p id="email-error" class="text-[9px] text-red-500 font-bold uppercase hidden">Invalid Email Address</p>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-white/50">Security Key</label>
+                        <button type="button" class="text-[9px] font-bold text-white/20 hover:text-white uppercase tracking-widest transition">Forgot?</button>
+                    </div>
+                    <input type="password" id="password" required class="field-input w-full p-4 text-sm font-bold" placeholder="••••••••">
+                    <p id="pass-error" class="text-[9px] text-red-500 font-bold uppercase hidden">Minimum 8 Characters Required</p>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-white text-black py-5 mt-4 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-gray-200 transition-all flex items-center justify-center gap-3">
+                    <span id="btn-text">Initiate Session</span>
+                    <i id="btn-icon" class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="mt-10 pt-8 border-t border-white/10 text-center">
+                <p id="mode-text" class="text-[10px] font-bold text-white/30 uppercase tracking-[0.15em]">
+                    Don't have an active roster spot? 
+                    <button onclick="switchMode()" class="text-white hover:underline block mt-2 mx-auto">Apply for Registration</button>
+                </p>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center px-4">
+            <div class="flex items-center gap-3">
+                <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                <span class="text-[9px] font-black uppercase tracking-widest text-white/20">Secure Link Established</span>
+            </div>
+            <span class="text-[9px] font-black uppercase tracking-widest text-white/20">v.2026.04</span>
+        </div>
+    </div>
+
+    <script>
+        let isSignUp = false;
+
+        function switchMode() {
+            isSignUp = !isSignUp;
+            const nameGroup = document.getElementById('name-group');
+            const title = document.getElementById('mode-title');
+            const btnText = document.getElementById('btn-text');
+            const modeText = document.getElementById('mode-text');
+
+            if (isSignUp) {
+                nameGroup.classList.remove('hidden');
+                title.innerText = "Register Identity";
+                btnText.innerText = "Create Account";
+                modeText.innerHTML = 'Already on the roster? <button onclick="switchMode()" class="text-white hover:underline block mt-2 mx-auto">Initiate Login</button>';
+            } else {
+                nameGroup.classList.add('hidden');
+                title.innerText = "Member Login";
+                btnText.innerText = "Initiate Session";
+                modeText.innerHTML = 'Don\'t have an active roster spot? <button onclick="switchMode()" class="text-white hover:underline block mt-2 mx-auto">Apply for Registration</button>';
+            }
+        }
+
+        document.getElementById('auth-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+            
+            let valid = true;
+
+            // Reset UI
+            email.classList.remove('error-border');
+            password.classList.remove('error-border');
+            document.getElementById('email-error').classList.add('hidden');
+            document.getElementById('pass-error').classList.add('hidden');
+
+            // Basic Validation
+            if (!email.value.includes('@')) {
+                email.classList.add('error-border');
+                document.getElementById('email-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (password.value.length < 8) {
+                password.classList.add('error-border');
+                document.getElementById('pass-error').classList.remove('hidden');
+                valid = false;
+            }
+
+            if (valid) {
+                // Functional Transition
+                btn.disabled = true;
+                btn.classList.add('opacity-50');
+                btnText.innerText = "Authenticating";
+                btnIcon.className = "fa-solid fa-circle-notch animate-spin";
+
+                // Simulate Network Verification
+                setTimeout(() => {
+                    window.location.href = "articles.html";
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
