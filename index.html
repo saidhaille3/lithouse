@@ -51,14 +51,17 @@
         }
 
         /* Fire text effect */
-        .fire-text {
-            background: linear-gradient(to bottom, #fff 20%, #ff9900 50%, #ff3c00 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-            transition: all 0.4s ease;
-        }
+    .fire-text {
+    background: linear-gradient(to bottom, #fff 20%, #ff9900 50%, #ff3c00 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transition: all 0.4s ease;
+    /* Add this line below */
+    will-change: background; 
+}
+
 
         .dark .fire-text {
             background: url('/images/flame.mov') center center / cover no-repeat;
