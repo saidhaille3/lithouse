@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone Space Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen">
+  <h1 class="text-2xl font-bold mb-6 text-center px-4">Twitter Space (Mobile Dev)</h1>
+  
+  <div id="controls" class="space-y-4">
+    <button id="join-btn" class="bg-blue-600 active:bg-blue-800 px-8 py-3 rounded-full font-bold text-lg shadow-lg transition-all">
+      Start Space
+    </button>
+  </div>
+
+  <div id="participants" class="mt-10 grid grid-cols-2 gap-4"></div>
+
+  <script>
+    // FIX: Changed 'LivekitClient' to 'LiveKitClient' (Capital K)
+    const { Room, RoomEvent, TokenSource } = LiveKitClient;
+
+    const LIVEKIT_URL = "wss://lithouse-spaces-2m7xhytt.livekit.cloud";
+    const SANDBOX_ID = "lithouse-spaces-2amvdi"; 
+
+    async function startSpace() {
+      const joinBtn = document.getElementById('join-btn');
+      joinBtn.innerText = "Connecting...";
+      joinBtn.disabled = true;
+
+      const room = new Room();
+
+      // Setup the Sandbox
+      const tokenSource = TokenSource.sandboxTokenServer(SANDBOX_ID);
+      
+      try {
+        // Fetch token from your live sandbox
+        const { serverUrl, participantToken } = await tokenSource.fetch({ 
+            roomName: "lithouse-test",
+            participantName: "iPhone-User-" + Math.floor(Math.random() * 100)
+        });
+
+        // Connect
+        await room.connect(serverUrl, participantToken);
+        
+        // Microphone
+        await room.localParticipant.setMicrophoneEnabled(true);
+        
+        joinBtn.innerText = "Status: LIVE 🎙️";
+        joinBtn.classList.remove('bg-blue-600');
+        joinBtn.classList.add('bg-red-600');
+        
+        console.log("Success! Connected to sandbox.");
+
+        room.on(RoomEvent.TrackSubscribed, (track) => {
+          if (track.kind === 'audio') {
+            const el = track.attach();
+            document.body.appendChild(el);
+          }
+        });
+
+      } catch (err) {
+        joinBtn.disabled = false;
+        joinBtn.innerText = "Start Space";
+        console.error(err);
+        alert("Error: " + err.message);
+      }
+    }
+
+    document.getElementById('join-btn').onclick = startSpace;
+  </script>
+</body>
+</html>
