@@ -980,37 +980,38 @@
     
     <div class="relative w-full max-w-5xl bg-white dark:bg-[#0f0f0f] rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)] border border-black/10 dark:border-white/10 max-h-[90vh] flex flex-col scale-95 opacity-0 transition-all duration-300" id="modalContainer">
         
-        <div class="p-6 md:p-12 border-b border-black/5 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
-                
-                <div class="flex items-center gap-4 md:gap-6 flex-1 md:justify-end text-center md:text-right w-full">
-                    <div class="order-2 md:order-1">
-                        <h2 id="modalTeam1Name" class="text-xl md:text-4xl font-black uppercase tracking-tighter dark:text-white leading-none">---</h2>
-                        <p id="modalTeam1Record" class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1 dark:text-white">0-0</p>
-                    </div>
-                    <img id="modalTeam1Logo" src="" class="w-12 h-12 md:w-20 md:h-20 object-contain order-1 md:order-2" alt="">
-                </div>
-
-                <div class="text-center px-4 md:px-10 md:border-x border-black/5 dark:border-white/10 min-w-fit">
-                    <span id="modalGameStatus" class="bg-gray-500 text-white text-[9px] md:text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg">PREGAME</span>
-                    <div class="flex items-center justify-center gap-4 md:gap-8">
-                        <span id="modalTeam1Score" class="text-4xl md:text-7xl font-black tracking-tighter dark:text-white">0</span>
-                        <span class="text-xl md:text-3xl font-black opacity-20">-</span>
-                        <span id="modalTeam2Score" class="text-4xl md:text-7xl font-black tracking-tighter dark:text-white">0</span>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 md:gap-6 flex-1 md:justify-start text-center md:text-left w-full">
-                    <img id="modalTeam2Logo" src="" class="w-12 h-12 md:w-20 md:h-20 object-contain" alt="">
-                    <div>
-                        <h2 id="modalTeam2Name" class="text-xl md:text-4xl font-black uppercase tracking-tighter dark:text-white leading-none">---</h2>
-                        <p id="modalTeam2Record" class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1 dark:text-white">0-0</p>
-                    </div>
-                </div>
+        <div class="p-4 md:p-8 border-b border-black/5 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8">
+        
+        <div class="flex items-center gap-3 md:gap-4 flex-1 md:justify-end text-center md:text-right w-full min-w-0">
+            <div class="order-2 md:order-1 min-w-0">
+                <h2 id="modalTeam1Name" class="text-lg md:text-3xl font-black uppercase tracking-tighter dark:text-white leading-none truncate">---</h2>
+                <p id="modalTeam1Record" class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1 dark:text-white">0-0</p>
             </div>
-            
-            <button onclick="closeGameModal()" class="absolute top-6 right-8 text-3xl font-light hover:rotate-90 transition-transform dark:text-white opacity-50 hover:opacity-100">&times;</button>
+            <img id="modalTeam1Logo" src="" class="w-10 h-10 md:w-16 md:h-16 object-contain flex-shrink-0 order-1 md:order-2" alt="">
         </div>
+
+        <div class="text-center px-3 md:px-8 md:border-x border-black/5 dark:border-white/10 flex-shrink-0">
+            <span id="modalGameStatus" class="bg-gray-500 text-white text-[9px] md:text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block shadow-lg">PREGAME</span>
+            <div class="flex items-center justify-center gap-3 md:gap-6">
+                <span id="modalTeam1Score" class="text-3xl md:text-6xl font-black tracking-tighter dark:text-white">0</span>
+                <span class="text-lg md:text-2xl font-black opacity-20">-</span>
+                <span id="modalTeam2Score" class="text-3xl md:text-6xl font-black tracking-tighter dark:text-white">0</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 md:gap-4 flex-1 md:justify-start text-center md:text-left w-full min-w-0">
+            <img id="modalTeam2Logo" src="" class="w-10 h-10 md:w-16 md:h-16 object-contain flex-shrink-0" alt="">
+            <div class="min-w-0">
+                <h2 id="modalTeam2Name" class="text-lg md:text-3xl font-black uppercase tracking-tighter dark:text-white leading-none truncate">---</h2>
+                <p id="modalTeam2Record" class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1 dark:text-white">0-0</p>
+            </div>
+        </div>
+    </div>
+    
+    <button onclick="closeGameModal()" class="absolute top-4 right-6 text-3xl font-light hover:rotate-90 transition-transform dark:text-white opacity-50 hover:opacity-100">&times;</button>
+</div>
+
 
         <div class="flex-grow overflow-y-auto no-scrollbar p-6 md:p-10">
             <div class="grid lg:grid-cols-3 gap-10">
@@ -1047,11 +1048,47 @@
 </div>
 
 <script>
+
+// Cache for standings seeds -- keyed by ESPN team ID
+let standingsSeedMap = {};
+
+async function loadStandings() {
+    try {
+        const res = await fetch('https://site.api.espn.com/apis/v2/sports/basketball/nba/standings');
+        const data = await res.json();
+        const newMap = {};
+
+        data.children?.forEach(conference => {
+            const entries = conference.standings?.entries || [];
+
+            // Each entry has a 'stats' array -- find wins and losses and compute win pct
+            const ranked = entries.map(entry => {
+                const wins = entry.stats?.find(s => s.name === 'wins')?.value ?? 0;
+                const losses = entry.stats?.find(s => s.name === 'losses')?.value ?? 0;
+                const total = wins + losses;
+                const winPct = total > 0 ? wins / total : 0;
+                return { id: entry.team.id, winPct, wins, losses };
+            });
+
+            // Sort descending by win pct -- ties broken by raw wins
+            ranked.sort((a, b) => b.winPct - a.winPct || b.wins - a.wins);
+
+            // Assign seed 1–15 per conference based on that real sorted order
+            ranked.forEach((team, idx) => {
+                newMap[team.id] = idx + 1;
+            });
+        });
+
+        standingsSeedMap = newMap;
+    } catch (err) {
+        console.warn("Standings fetch failed:", err);
+    }
+}
+
 async function loadGames() {
     try {
         const scroller = document.getElementById('scoreScroller');
         
-        // Helper to get YYYYMMDD format
         const getESPNFormatDate = (date) => {
             return date.toISOString().split('T')[0].replace(/-/g, '');
         };
@@ -1063,7 +1100,6 @@ async function loadGames() {
         const dateToday = getESPNFormatDate(today);
         const dateYesterday = getESPNFormatDate(yesterday);
 
-        // Fetch both dates simultaneously
         const [resToday, resYesterday] = await Promise.all([
             fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateToday}`),
             fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateYesterday}`)
@@ -1072,7 +1108,6 @@ async function loadGames() {
         const dataToday = await resToday.json();
         const dataYesterday = await resYesterday.json();
 
-        // Combine events from both days
         let allEvents = [...(dataToday.events || []), ...(dataYesterday.events || [])];
 
         if (allEvents.length === 0) {
@@ -1080,10 +1115,6 @@ async function loadGames() {
             return;
         }
 
-        // Smart Sorting: 
-        // 1. Live games (state: 'in') first
-        // 2. Scheduled games (state: 'pre') second
-        // 3. Finished games (state: 'post') last
         allEvents.sort((a, b) => {
             const stateOrder = { 'in': 0, 'pre': 1, 'post': 2 };
             return stateOrder[a.status.type.state] - stateOrder[b.status.type.state];
@@ -1098,17 +1129,26 @@ async function loadGames() {
             const status = event.status.type;
             const isLive = status.state === 'in';
             
+            // Seed lookup -- falls back silently if not found
+            const awaySeed = standingsSeedMap[away.team.id];
+            const homeSeed = standingsSeedMap[home.team.id];
+            const seedBadge = (seed) => seed
+                ? `<span class="text-[9px] font-black text-black/30 dark:text-white/30 leading-none">${seed}</span>`
+                : '';
+
             let cardBg = isLive ? 'bg-white dark:bg-neutral-900' : 'bg-gray-50/50 dark:bg-neutral-900/50';
             let dotColor = isLive ? 'bg-red-600' : (status.state === 'pre' ? 'bg-amber-500' : 'bg-gray-500');
             let textColor = isLive ? 'text-red-600' : 'text-gray-400 dark:text-gray-300';
             let fontWeight = isLive ? 'font-black' : 'font-bold';
-            let ping = isLive ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>' : 
-                       (status.state === 'pre' ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>' : '');
+            let ping = isLive
+                ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>'
+                : (status.state === 'pre' ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>' : '');
             
-            // Smarter Label: Show "Yesterday" if it's an old game
-            let label = isLive ? `Live • ${status.shortDetail}` : 
-                        (status.state === 'pre' ? `Pregame • ${status.shortDetail}` : 
-                        (event.date.includes(today.toISOString().split('T')[0]) ? 'Final' : 'Final • Yesterday'));
+            let label = isLive
+                ? `Live • ${status.shortDetail}`
+                : (status.state === 'pre'
+                    ? `Pregame • ${status.shortDetail}`
+                    : (event.date.includes(today.toISOString().split('T')[0]) ? 'Final' : 'Final • Yesterday'));
 
             const card = document.createElement('div');
             card.className = `min-w-[240px] ${cardBg} border border-gray-200/60 dark:border-white/10 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all cursor-pointer`;
@@ -1126,21 +1166,23 @@ async function loadGames() {
                 </div>
                 <div class="space-y-3">
                     <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
                             <img src="${away.team.logo}" class="w-6 h-6 object-contain">
                             <span class="text-sm font-bold text-gray-800 dark:text-white">${away.team.abbreviation}</span>
+                            ${seedBadge(awaySeed)}
                         </div>
-                        ${status.state === 'pre' 
+                        ${status.state === 'pre'
                             ? `<span class="text-xs font-medium text-gray-400 dark:text-gray-300">${away.records?.[0]?.summary || '0-0'}</span>`
                             : `<span class="text-sm font-black text-gray-900 dark:text-white">${away.score || '0'}</span>`
                         }
                     </div>
                     <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
                             <img src="${home.team.logo}" class="w-6 h-6 object-contain">
                             <span class="text-sm font-bold text-gray-800 dark:text-white">${home.team.abbreviation}</span>
+                            ${seedBadge(homeSeed)}
                         </div>
-                        ${status.state === 'pre' 
+                        ${status.state === 'pre'
                             ? `<span class="text-xs font-medium text-gray-400 dark:text-gray-300">${home.records?.[0]?.summary || '0-0'}</span>`
                             : `<span class="text-sm font-black text-gray-900 dark:text-white">${home.score || '0'}</span>`
                         }
@@ -1153,6 +1195,12 @@ async function loadGames() {
         console.error("Scorecard fetch error:", err);
     }
 }
+
+// Load standings first, then games -- refresh standings every 10 min, games every 30s
+loadStandings().then(loadGames);
+setInterval(loadGames, 30000);
+setInterval(loadStandings, 600000);
+
 
 async function openGameModal(gameId) {
     const modal = document.getElementById('gameModal');
@@ -1169,48 +1217,54 @@ async function openGameModal(gameId) {
     try {
         const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${gameId}`);
         const data = await res.json();
-        
+
+        // Pull from scoreboard competitors -- this is where logo + record actually live
         const comp = data.header.competitions[0];
         const away = comp.competitors.find(c => c.homeAway === 'away');
         const home = comp.competitors.find(c => c.homeAway === 'home');
 
+        // Logo lives at team.logo, record lives at record[0].displayValue
+        const awayLogo = away.team.logo || `https://a.espncdn.com/i/teamlogos/nba/500/${away.team.abbreviation.toLowerCase()}.png`;
+        const homeLogo = home.team.logo || `https://a.espncdn.com/i/teamlogos/nba/500/${home.team.abbreviation.toLowerCase()}.png`;
+
+        const awayRecord = away.record?.[0]?.displayValue || away.records?.[0]?.summary || '0-0';
+        const homeRecord = home.record?.[0]?.displayValue || home.records?.[0]?.summary || '0-0';
+
         document.getElementById('modalGameStatus').innerText = comp.status.type.detail;
+
         document.getElementById('modalTeam1Name').innerText = away.team.abbreviation;
-        document.getElementById('modalTeam1Score').innerText = away.score || "0";
-        document.getElementById('modalTeam1Logo').src = away.team.logo;
-        document.getElementById('modalTeam1Record').innerText = away.records?.[0]?.summary || "0-0";
+        document.getElementById('modalTeam1Score').innerText = away.score || '0';
+        document.getElementById('modalTeam1Logo').src = awayLogo;
+        document.getElementById('modalTeam1Record').innerText = awayRecord;
 
         document.getElementById('modalTeam2Name').innerText = home.team.abbreviation;
-        document.getElementById('modalTeam2Score').innerText = home.score || "0";
-        document.getElementById('modalTeam2Logo').src = home.team.logo;
-        document.getElementById('modalTeam2Record').innerText = home.records?.[0]?.summary || "0-0";
+        document.getElementById('modalTeam2Score').innerText = home.score || '0';
+        document.getElementById('modalTeam2Logo').src = homeLogo;
+        document.getElementById('modalTeam2Record').innerText = homeRecord;
 
-        let statsHtml = "";
+        let statsHtml = '';
         if (data.boxscore?.players) {
             data.boxscore.players.forEach(teamGroup => {
                 const teamName = teamGroup.team.displayName;
                 const teamAbbr = teamGroup.team.abbreviation;
-                const teamLogo = teamGroup.team.logo; // Pulling logo for the header
-                
-                // FIXED HEADER: Added the <img> tag for the team logo
+                const teamLogo = teamGroup.team.logo || `https://a.espncdn.com/i/teamlogos/nba/500/${teamAbbr.toLowerCase()}.png`;
+
                 statsHtml += `
                     <tr class="bg-black/5 dark:bg-white/5">
                         <td colspan="6" class="py-3 px-4">
                             <div class="flex items-center gap-2">
                                 <img src="${teamLogo}" class="w-5 h-5 object-contain" alt="">
-                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">
-                                    ${teamName}
-                                </span>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">${teamName}</span>
                             </div>
                         </td>
                     </tr>`;
 
                 teamGroup.statistics.forEach(statSet => {
                     const labels = statSet.labels || [];
-                    const pIdx = labels.indexOf("PTS");
-                    const rIdx = labels.indexOf("REB");
-                    const aIdx = labels.indexOf("AST");
-                    const mIdx = labels.indexOf("MIN");
+                    const pIdx = labels.indexOf('PTS');
+                    const rIdx = labels.indexOf('REB');
+                    const aIdx = labels.indexOf('AST');
+                    const mIdx = labels.indexOf('MIN');
 
                     statSet.athletes.forEach(p => {
                         if (p.stats && p.stats.length > 1) {
@@ -1228,7 +1282,7 @@ async function openGameModal(gameId) {
                 });
             });
         }
-        
+
         document.getElementById('modalBoxScoreBody').innerHTML = statsHtml || '<tr><td colspan="6" class="py-10 text-center opacity-40">Boxscore available at tip-off</td></tr>';
 
         const plays = data.plays || [];
