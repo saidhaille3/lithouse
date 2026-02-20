@@ -1049,24 +1049,49 @@
 <script>
 async function loadGames() {
     try {
-        const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard');
-        const data = await res.json();
         const scroller = document.getElementById('scoreScroller');
         
-        if (!data.events || data.events.length === 0) {
-            scroller.innerHTML = '<div class="min-w-[240px] p-8 text-center text-sm text-gray-400 dark:text-gray-500">No games today</div>';
+        // Helper to get YYYYMMDD format
+        const getESPNFormatDate = (date) => {
+            return date.toISOString().split('T')[0].replace(/-/g, '');
+        };
+
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        const dateToday = getESPNFormatDate(today);
+        const dateYesterday = getESPNFormatDate(yesterday);
+
+        // Fetch both dates simultaneously
+        const [resToday, resYesterday] = await Promise.all([
+            fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateToday}`),
+            fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${dateYesterday}`)
+        ]);
+
+        const dataToday = await resToday.json();
+        const dataYesterday = await resYesterday.json();
+
+        // Combine events from both days
+        let allEvents = [...(dataToday.events || []), ...(dataYesterday.events || [])];
+
+        if (allEvents.length === 0) {
+            scroller.innerHTML = '<div class="min-w-[240px] p-8 text-center text-sm text-gray-400 dark:text-gray-500">No games found</div>';
             return;
         }
 
-        // Sort: Live (in) -> Upcoming (pre) -> Finished (post)
-        const sortedEvents = [...data.events].sort((a, b) => {
+        // Smart Sorting: 
+        // 1. Live games (state: 'in') first
+        // 2. Scheduled games (state: 'pre') second
+        // 3. Finished games (state: 'post') last
+        allEvents.sort((a, b) => {
             const stateOrder = { 'in': 0, 'pre': 1, 'post': 2 };
             return stateOrder[a.status.type.state] - stateOrder[b.status.type.state];
         });
 
         scroller.innerHTML = '';
         
-        sortedEvents.forEach(event => {
+        allEvents.forEach(event => {
             const comp = event.competitions[0];
             const away = comp.competitors.find(c => c.homeAway === 'away');
             const home = comp.competitors.find(c => c.homeAway === 'home');
@@ -1079,8 +1104,11 @@ async function loadGames() {
             let fontWeight = isLive ? 'font-black' : 'font-bold';
             let ping = isLive ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>' : 
                        (status.state === 'pre' ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>' : '');
+            
+            // Smarter Label: Show "Yesterday" if it's an old game
             let label = isLive ? `Live • ${status.shortDetail}` : 
-                        (status.state === 'pre' ? `Pregame • ${status.shortDetail}` : `Final`);
+                        (status.state === 'pre' ? `Pregame • ${status.shortDetail}` : 
+                        (event.date.includes(today.toISOString().split('T')[0]) ? 'Final' : 'Final • Yesterday'));
 
             const card = document.createElement('div');
             card.className = `min-w-[240px] ${cardBg} border border-gray-200/60 dark:border-white/10 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all cursor-pointer`;
@@ -1122,7 +1150,7 @@ async function loadGames() {
             scroller.appendChild(card);
         });
     } catch (err) {
-        console.error(err);
+        console.error("Scorecard fetch error:", err);
     }
 }
 
@@ -1160,26 +1188,40 @@ async function openGameModal(gameId) {
         let statsHtml = "";
         if (data.boxscore?.players) {
             data.boxscore.players.forEach(teamGroup => {
+                const teamName = teamGroup.team.displayName;
                 const teamAbbr = teamGroup.team.abbreviation;
+                const teamLogo = teamGroup.team.logo; // Pulling logo for the header
+                
+                // FIXED HEADER: Added the <img> tag for the team logo
+                statsHtml += `
+                    <tr class="bg-black/5 dark:bg-white/5">
+                        <td colspan="6" class="py-3 px-4">
+                            <div class="flex items-center gap-2">
+                                <img src="${teamLogo}" class="w-5 h-5 object-contain" alt="">
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">
+                                    ${teamName}
+                                </span>
+                            </div>
+                        </td>
+                    </tr>`;
+
                 teamGroup.statistics.forEach(statSet => {
-                    // Critical Fix: Map labels to indices dynamically
                     const labels = statSet.labels || [];
                     const pIdx = labels.indexOf("PTS");
                     const rIdx = labels.indexOf("REB");
                     const aIdx = labels.indexOf("AST");
                     const mIdx = labels.indexOf("MIN");
 
-                    // Only show athletes with actual stats
                     statSet.athletes.forEach(p => {
                         if (p.stats && p.stats.length > 1) {
                             statsHtml += `
                                 <tr class="border-b border-black/5 dark:border-white/5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                    <td class="py-3 text-xs font-bold w-1/3 truncate dark:text-white pr-2">${p.athlete.displayName}</td>
+                                    <td class="py-3 text-xs font-bold w-1/3 truncate dark:text-white pr-2 pl-4">${p.athlete.displayName}</td>
                                     <td class="py-3 text-[10px] opacity-40 uppercase w-12 dark:text-white">${teamAbbr}</td>
                                     <td class="py-3 font-black text-center w-10 dark:text-white">${p.stats[pIdx] || '0'}</td>
                                     <td class="py-3 text-center w-10 dark:text-white">${p.stats[rIdx] || '0'}</td>
                                     <td class="py-3 text-center w-10 dark:text-white">${p.stats[aIdx] || '0'}</td>
-                                    <td class="py-3 text-amber-500 text-[10px] uppercase font-black text-right pr-2">${p.stats[mIdx] || '0'}</td>
+                                    <td class="py-3 text-amber-500 text-[10px] uppercase font-black text-right pr-4">${p.stats[mIdx] || '0'}</td>
                                 </tr>`;
                         }
                     });
