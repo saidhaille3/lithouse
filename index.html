@@ -1,10 +1,12 @@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lithouse – Where Sports Are Lit</title>
+    <title>Greenlight Sports Network </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,6 +16,57 @@
         }
     </script>
     <style>
+    /* Kill ALL native iOS video controls */
+video::-webkit-media-controls { display: none !important; }
+video::-webkit-media-controls-enclosure { display: none !important; }
+video::-webkit-media-controls-panel { display: none !important; }
+video::-webkit-media-controls-play-button { display: none !important; }
+video::-webkit-media-controls-timeline { display: none !important; }
+video::-webkit-media-controls-current-time-display { display: none !important; }
+video::-webkit-media-controls-time-remaining-display { display: none !important; }
+video::-webkit-media-controls-mute-button { display: none !important; }
+video::-webkit-media-controls-volume-slider { display: none !important; }
+video::-webkit-media-controls-fullscreen-button { display: none !important; }
+
+    /* Executive Reader Engine Styles */
+.reader-transition { 
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+}
+
+#greenlightReader.active {
+    transform: translateX(0);
+    display: block;
+}
+
+/* Custom Scrollbar for Reader */
+#greenlightReader::-webkit-scrollbar { width: 4px; }
+#greenlightReader::-webkit-scrollbar-track { background: transparent; }
+#greenlightReader::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+
+.reader-content-fade {
+    animation: readerFadeUp 0.8s ease forwards;
+}
+
+@keyframes readerFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+    /* Clean, static gradient specifically for the Lounge title */
+.lounge-title-gradient {
+    background: linear-gradient(135deg, #062c06 0%, #0a4d0a 35%, #d4af37 65%, #926f12 100%);
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    display: inline-block;
+}
+
+/* Brightens it for Dark Mode so it pops without using the video */
+.dark .lounge-title-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #059669 35%, #fbbf24 65%, #d97706 100%);
+    filter: brightness(1.1) saturate(1.2);
+}
+
         :root {
             --glass: rgba(0, 0, 0, 0.03);
             --glass-border: rgba(0, 0, 0, 0.08);
@@ -50,22 +103,44 @@
         justify-content: center;
         margin-bottom: 2rem;
     }
+/* Static version: Matches the nav's gradient but blocks the video effect */
+.fire-text-lounge {
+    background: linear-gradient(135deg, #062c06 0%, #0a4d0a 35%, #d4af37 65%, #926f12 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transition: all 0.4s ease;
+}
+
+/* In Dark Mode: We just boost the colors/brightness instead of using the .mov */
+.dark .fire-text-lounge {
+    background: linear-gradient(135deg, #10b981 0%, #059669 35%, #fbbf24 65%, #d97706 100%);
+    filter: brightness(1.2) saturate(1.4);
+}
 
     /* Fire text effect */
+    /* Green and Gold Gradient Effect */
+    /* Polished Dark Green and Gold Gradient */
     .fire-text {
-        background: linear-gradient(to bottom, #fff 20%, #ff9900 50%, #ff3c00 100%);
+        background: linear-gradient(135deg, #062c06 0%, #0a4d0a 35%, #d4af37 65%, #926f12 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
         display: inline-block;
         transition: all 0.4s ease;
+        /* Adds a subtle "pop" to the metallic look */
+        filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
     }
 
+    /* Dark Mode: Fixed Hue-Rotate for a richer Gold/Green fire */
     .dark .fire-text {
         background: url('/images/flame.mov') center center / cover no-repeat;
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
+        /* Hue shift 65-75deg hits the Green/Gold sweet spot better than 80deg */
+        filter: hue-rotate(75deg) brightness(1.3) saturate(1.4);
     }
 
     /* Fire text on light backgrounds */
@@ -77,28 +152,33 @@
     }
 
     /* Glowing Embers */
+    /* Green Glowing Embers */
     .ember {
         position: absolute;
         width: 4px;
         height: 4px;
-        background: radial-gradient(circle, #ff5f00, #ff0000);
+        /* Changed to Green Gradient */
+        background: radial-gradient(circle, #4ade80, #166534); 
         border-radius: 50%;
         pointer-events: none;
         z-index: 60;
-        box-shadow: 0 0 8px #ff4500;
+        /* Changed to Green Glow */
+        box-shadow: 0 0 8px #22c55e;
     }
 
-    /* Rising Smoke */
+    /* Rising Green Smoke/Mist */
     .smoke {
         position: absolute;
         width: 12px;
         height: 12px;
-        background: radial-gradient(circle, rgba(150,150,150,0.6) 0%, rgba(50,50,50,0) 70%);
+        /* Changed to subtle Green-tinted Smoke */
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, rgba(5, 46, 22, 0) 70%);
         border-radius: 50%;
         pointer-events: none;
         z-index: 59;
         filter: blur(2px);
     }
+
 
     /* Glass adapted for white bg */
     .ios-glass {
@@ -176,24 +256,63 @@ filter: invert(1) brightness(2);
     .dark .border-black\/5 {
         border-color: rgba(255, 255, 255, 0.1) !important;
     }
+.coming-soon {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 2. Create the hidden overlay */
+.coming-soon::before {
+    content: "COMING SOON";
+    position: absolute;
+    inset: 0; /* Covers the whole button */
+    background: #d4af37; /* Use your gold theme color */
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    pointer-events: none; /* Prevents the overlay from blocking the click if you still want it to work */
+}
+
+/* 3. Show the overlay on hover */
+.coming-soon:hover::before {
+    opacity: 1;
+}
+
+/* Dark mode adjustment */
+.dark .coming-soon::before {
+    background: #10b981; /* Emerald green for dark mode */
+    color: white;
+}
+
 </style>
 
 
 </head>
 <body class="antialiased overflow-x-hidden"><!-- Navigation -->
-<nav id="navbar" class="fixed top-0 w-full z-50 silver-nav px-3 py-4 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-        <img src="/images/logo1.webp" alt="The Lithouse Logo" class="h-9 w-auto" />
-        <span class="fire-text text-[1.325rem] font-extrabold tracking-tight leading-[1] relative -top-[2.2px] -ml-[2px]">
-            Lithouse
-        </span>
+<nav id="navbar" class="fixed top-0 w-full z-50 silver-nav px-2 py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+    <div class="relative w-9 h-9"> 
+        <img src="/images/logo.png" alt="The Greenlight Logo" class="transition-transform scale-150 origin-left translate-y-[4px] " />
     </div>
+    
+    
+<span class="fire-text text-[1rem] font-extrabold tracking-tight ml-1 py-1">
+    Greenlight
+</span>
+
+</div>
 
     <div class="hidden md:flex gap-6 text-sm font-semibold tracking-widest uppercase opacity-70">
         <a href="#" class="hover:text-amber-500 transition text-black dark:text-white">NFL</a>
         <a href="#" class="hover:text-amber-500 transition text-black dark:text-white">NBA</a>
-        <a href="#" class="hover:text-amber-500 transition text-black dark:text-white">Boxing</a>
-        <a href="#" class="hover:text-amber-500 transition text-black dark:text-white">Live</a>
+        <a href="#" class="hover:text-amber-500 transition text-black dark:text-white">UFC</a>
     </div>
 
     <div class="flex items-center gap-4">
@@ -210,8 +329,8 @@ filter: invert(1) brightness(2);
             </svg>
         </button>
 
-<div class="relative group cursor-pointer" onclick="toggleUserDashboard()">
-    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-200 p-[2px] transition-all duration-300">
+<div class="md:mr-3 relative group cursor-pointer" onclick="toggleUserDashboard()">
+    <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-200 p-[2px] transition-all duration-300">
         <div class="w-full h-full rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center overflow-hidden">
             <i class="fa-solid fa-user text-xs text-black dark:text-white opacity-80"></i>
         </div>
@@ -219,9 +338,9 @@ filter: invert(1) brightness(2);
     <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white dark:border-neutral-900 rounded-full"></span>
 </div>
 
-        <button class="hidden md:block bg-black dark:bg-white dark:text-black text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-md hover:bg-amber-600 dark:hover:bg-amber-500 transition-colors">Join Elite</button>
         
-        <button onclick="toggleSidebar()" class="text-2xl focus:outline-none text-black dark:text-white">
+        <button onclick="toggleSidebar()" class="md:hidden text-2xl focus:outline-none text-black dark:text-white"
+>
             <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="url(#goldGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <defs>
                     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -235,9 +354,8 @@ filter: invert(1) brightness(2);
         </button>
     </div>
 </nav>
-<div id="userDashboard" class="fixed inset-y-0 right-0 w-[320px] bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl z-[70] transform translate-x-full transition-transform duration-500 ease-in-out shadow-[-20px_0_80px_rgba(0,0,0,0.2)] border-l border-gray-200 dark:border-white/5">
+<div id="userDashboard" class="fixed inset-y-0 right-0 w-[320px] bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-2xl z-[70] transform translate-x-full transition-transform duration-500 ease-in-out shadow-[-20px_0_80px_rgba(0,0,0,0.2)] border-l border-gray-200 dark:border-white/5 h-full overflow-y-auto no-scrollbar">
     <div class="p-8 flex justify-between items-center border-b border-gray-100 dark:border-white/5">
-        <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-black/40 dark:text-white/40">Account</h2>
         <button onclick="toggleUserDashboard()" class="text-2xl text-black dark:text-white opacity-40 hover:opacity-100 transition-opacity">&times;</button>
     </div>
 
@@ -259,11 +377,14 @@ filter: invert(1) brightness(2);
             <p class="text-[8px] font-black uppercase text-amber-500 tracking-widest mb-1">XP Points</p>
             <p class="text-xl font-black dark:text-white">12,450</p>
         </div>
-        <div class="bg-gray-50 dark:bg-white/5 p-4 rounded-2xl border border-black/5 dark:border-white/5">
-            <p class="text-[8px] font-black uppercase text-red-600 tracking-widest mb-1">Rank</p>
-            <p class="text-xl font-black dark:text-white">#42</p>
-        </div>
+
     </div>
+    <div class="px-8 mb-8">
+    <button class="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-black uppercase text-[10px] tracking-[0.2em] rounded-2xl shadow-lg shadow-amber-500/20 hover:scale-[1.02] active:scale-95 transition-all">
+        Join Elite Membership
+    </button>
+</div>
+
 
     <div class="px-6 space-y-2">
         <a href="#" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all group">
@@ -319,30 +440,35 @@ filter: invert(1) brightness(2);
     <a href="#" class="group flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-gray-100">
         <div class="flex items-center gap-4">
             <img src="images/blogo.webp" class="w-10 h-10 object-contain" alt="UFC">
-            <span class="font-bold text-lg tracking-tight group-hover:translate-x-1 transition-transform dark:text-white">Boxing</span>
+            <span class="font-bold text-lg tracking-tight group-hover:translate-x-1 transition-transform dark:text-white">UFC</span>
         </div>
         <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:opacity-100 transition-opacity dark:text-white"></i>
     </a>
 
- <div class="mt-4 pt-6 border-t border-gray-100 dark:border-white/10 px-2 space-y-4">
+<div class="mt-4 pt-6 border-t border-gray-100 dark:border-white/10 px-2 space-y-4">
     <a href="#" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group">
-        <img src="images/bv.webp" class="absolute inset-0 w-full h-full object-cover object-[center_40%] transition-transform duration-500 group-hover:scale-105" alt="Ball-Verse">
+        <img src="images/aw.png" class="absolute inset-0 w-full h-full object-cover object-[60%_50%] transition-transform duration-500 group-hover:scale-105" alt="Ball-Verse">
         <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
     </a>
 
 <a href="#" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group">
-    <img src="images/store.webp" 
+    <img src="images/store.jpeg" 
          class="absolute inset-0 w-full h-full object-cover object-[center_40%]
  transition-transform duration-500 group-hover:scale-110" 
-         alt="Lithouse Store">
+         alt="Greenlight Store">
     
     <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300"></div>
 </a>
+
+
 </div>
+
 </div>
 
 
-</div><!-- Score Scroller --><div class="mt-16 z-40 overflow-x-auto whitespace-nowrap py-5 px-4 bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/10 no-scrollbar shadow-sm">
+</div><!-- Score Scroller -->
+
+<div class="mt-16 z-40 overflow-x-auto whitespace-nowrap py-5 px-4 bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/10 no-scrollbar shadow-sm">
     <div id="scoreScroller" class="inline-flex space-x-4">
 
     <div class="min-w-[240px] bg-white dark:bg-neutral-900 border border-gray-200/60 dark:border-white/10 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
@@ -519,8 +645,10 @@ filter: invert(1) brightness(2);
 
 </div>
 </section><!-- Featured Coverage --><section class="max-w-[1400px] mx-auto px-6 py-20">
-  <h2 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30 mb-10">Featured Coverage</h2><div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-    <div class="md:col-span-8 h-[500px] ios-glass rounded-[2.5rem] overflow-hidden relative group cursor-pointer">
+<h2 class="text-[11px] md:text-center font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30 mb-10">Featured Coverage</h2>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+    <div class="md:col-span-10 md:col-start-2 lg:col-span-8 lg:col-start-3 h-[500px] ios-glass rounded-[2.5rem] overflow-hidden relative group cursor-pointer">
+
       <img src="images/rev2.webp" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105">
       <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
       <div class="absolute bottom-10 left-10">
@@ -540,10 +668,10 @@ filter: invert(1) brightness(2);
   <button class="text-[10px] font-black uppercase tracking-[0.3em] hover:text-red-600 transition">View Full Schedule</button>
 </div>
 
-<div class="grid md:grid-cols-3 gap-10">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   
   <div class="group relative bg-white dark:bg-neutral-900 rounded-[2rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-    <div class="relative h-64 w-full overflow-hidden bg-gray-100 dark:bg-neutral-800">
+<div class="relative w-full overflow-hidden" style="aspect-ratio: 16/9;">
       <img src="images/game.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
       
       <div class="absolute top-6 left-6 flex items-center gap-2 bg-black text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl">
@@ -552,9 +680,12 @@ filter: invert(1) brightness(2);
       </div>
 
       <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 backdrop-blur-[2px]">
-        <button class="bg-white text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-2xl text-[10px] transform translate-y-4 group-hover:translate-y-0 transition-all">
+
+      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 backdrop-blur-[2px]">
+        <a href="live2.html" class="inline-block bg-white text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-2xl text-[10px] transform translate-y-4 group-hover:translate-y-0 transition-all hover:bg-red-600 hover:text-white">
           Watch Stream
-        </button>
+        </a>
+      </div>
       </div>
     </div>
 
@@ -565,33 +696,28 @@ filter: invert(1) brightness(2);
   </div>
 
   <div class="group relative bg-white dark:bg-neutral-900 rounded-[2rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-    <div class="relative h-64">
-      <img src="images/dp.webp" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
-      <div class="absolute top-6 left-6 bg-black/10 backdrop-blur-md text-black dark:text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-black/5 dark:border-white/10">
-        Replay
-      </div>
-      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
-        <button class="bg-white text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl text-[10px]">
-          Play Replay
-        </button>
-      </div>
-    </div>
-    <div class="p-8">
-      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-2">Eagles Draft Party</h3>
-      <p class="text-[10px] font-bold text-black/30 dark:text-white/30 uppercase tracking-[0.2em]">Now Available • 2h 45m</p>
-    </div>
-  </div>
-
-  <div class="group relative bg-white dark:bg-neutral-900 rounded-[2rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-    <div class="relative h-64">
-      <img src="images/dr.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-      <div class="absolute top-6 left-6 bg-red-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl">
+<div class="relative w-full overflow-hidden" style="aspect-ratio: 16/9;">
+      <img src="images/nbaplogo.png" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" />
+      <div class="absolute top-6 left-6 bg-slate-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl">
         Coming Up
       </div>
     </div>
     <div class="p-8">
-      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-2">NFL Draft Recap</h3>
-      <p class="text-[10px] font-bold text-black/30 dark:text-white/30 uppercase tracking-[0.2em]">Starts Tomorrow • 2:30 PM ET</p>
+      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-2">2026 NBA Playoffs Watch Party</h3>
+      <p class="text-[10px] font-bold text-black/30 dark:text-white/30 uppercase tracking-[0.2em]">Starts April 18 • 1:00 PM ET</p>
+    </div>
+  </div>
+
+  <div class="group relative bg-white dark:bg-neutral-900 rounded-[2rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+<div class="relative w-full overflow-hidden" style="aspect-ratio: 16/9;">
+      <img src="images/dr.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+      <div class="absolute top-6 left-6 bg-slate-600 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl">
+        Coming Up
+      </div>
+    </div>
+    <div class="p-8">
+      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-2">2026 NFL Draft Recap</h3>
+      <p class="text-[10px] font-bold text-black/30 dark:text-white/30 uppercase tracking-[0.2em]">Starts April 26 • 2:30 PM ET</p>
     </div>
   </div>
 
@@ -603,7 +729,7 @@ filter: invert(1) brightness(2);
   <div class="max-w-[1400px] mx-auto px-6">
 
 <div class="flex items-center justify-between mb-10">
-  <h2 class="text-4xl font-black uppercase  tracking-tighter text-black dark:text-white">Highlights</h2>
+<h2 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30">Highlights</h2>
   <div class="flex gap-2">
     <span class="w-8 h-1 bg-black dark:bg-white rounded-full"></span>
     <span class="w-8 h-1 bg-black/10 dark:bg-white/10 rounded-full"></span>
@@ -629,12 +755,14 @@ filter: invert(1) brightness(2);
      </div>
   </div>
 </div>
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8">
-            <h3 class="text-white font-black text-2xl uppercase  tracking-tighter mb-1 drop-shadow-lg">Top 10 Dunks – This Year</h3>
-            <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Insane dunks from across the leagues.</p>
-            <button class="bg-yellow-400 hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Watch Full Highlights</button>
-          </div>
-        </div>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8">
+    <h3 class="text-white font-black text-2xl uppercase tracking-tighter mb-1">Top 10 Dunks – This Year</h3>
+    <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Insane dunks from across the leagues.</p>
+    <button onclick="openVideoModal('video/gossip.mp4', 'Top 10 Dunks', 'NBA Season Highlights')" 
+            class="bg-yellow-400 hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+        Watch Full Highlights
+    </button>
+</div>        </div>
 
     <div class="w-[350px] md:w-[450px] group rounded-[2.5rem] overflow-hidden relative ios-glass border border-black/5 dark:border-white/10 flex-shrink-0 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
 
@@ -653,11 +781,14 @@ filter: invert(1) brightness(2);
      </div>
   </div>
 </div>
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8">
-            <h3 class="text-white font-black text-2xl uppercase  tracking-tighter mb-1 drop-shadow-lg">Game-Winning Beaters</h3>
-            <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">The clutchest moments from this season.</p>
-            <button class="bg-yellow-400 hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Full Replay</button>
-          </div>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8">
+    <h3 class="text-white font-black text-2xl uppercase tracking-tighter mb-1">Game-Winning Beaters</h3>
+    <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">The clutchest moments.</p>
+    <button onclick="openVideoModal('videos/clutch.mp4', 'Game-Winning Beaters', 'Clutch Moments 2026')" 
+            class="bg-yellow-400 hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+        Full Replay
+    </button>
+</div>
         </div>
 
     <div class="w-[350px] md:w-[450px] group rounded-[2.5rem] overflow-hidden relative ios-glass border border-black/5 dark:border-white/10 flex-shrink-0 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
@@ -693,49 +824,51 @@ filter: invert(1) brightness(2);
   <div class="max-w-7xl mx-auto px-6">
 
 <div class="flex items-center justify-between mb-16">
-  <h2 class="text-5xl font-black uppercase  tracking-tighter">
+<h2 class="text-[11px] font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30">
     Top Stories
-  </h2>
-  <div class="h-[2px] flex-grow mx-8 bg-black/5 dark:bg-white/10 hidden md:block"></div>
+</h2>
+
+  <div class="h-[2px] flex-grow mx-8 bg-black/5 dark:bg-white/10 hidden md:block">
+      
+  </div>
 </div>
 
-<div class="grid md:grid-cols-3 gap-12">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   
-  <article class="group relative bg-white dark:bg-neutral-900 rounded-[2.5rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-    <div class="relative h-64 overflow-hidden">
+  <article onclick="openReader('wemby-mvp')" class="group relative bg-white dark:bg-neutral-900 rounded-[2.5rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
       <img src="images/wemby.jpeg" 
            class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" />
       <div class="absolute inset-0"></div>
     </div>
 
     <div class="p-8">
-      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-3 block">NBA Analysis</span>
-      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-4 group-hover:text-red-600 transition-colors">
-        Wemby Drops 47 <br/>in OT Classic vs Thunder
+      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-600 mb-3 block">NBA Awards</span>
+      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-4 group-hover:text-emerald-600 transition-colors">
+        The Case For <br/> Youngest NBA MVP Ever 
       </h3>
       <p class="text-sm text-black/50 dark:text-white/50 font-medium leading-relaxed mb-6">
-        In one of the wildest finishes this season, Wemby takes over in the 4th and OT to seal the win in San Antonio.
-      </p>
+Dethroning D-Rose as the youngest MVP ever would be more than just a record; it’s the official start of the Wembanyama era.
+ </p>
       <a href="#" class="inline-flex items-center gap-2 text-black dark:text-white text-[10px] font-black uppercase tracking-widest border-b-2 border-black dark:border-white pb-1 hover:border-red-600 transition-all">
         Read Full Story
       </a>
     </div>
   </article>
 
-  <article class="group relative bg-white dark:bg-neutral-900 rounded-[2.5rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-    <div class="relative h-64 overflow-hidden">
+  <article onclick="openReader('jett-return')"  class="group relative bg-white dark:bg-neutral-900 rounded-[2.5rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
       <img src="images/jj.jpeg" 
            class="object-cover object-top w-full h-full transition-transform duration-700 group-hover:scale-110" />
       <div class="absolute inset-0"></div>
     </div>
     <div class="p-8">
-      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-3 block">NFL Rumors</span>
-      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-4 group-hover:text-red-600 transition-colors">
-        Jefferson Yet to Sign <br/>Tag -- Trade on Table
+      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-3 block">NFL Offseason</span>
+      <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-4 group-hover:text-cyan-600 transition-colors">
+        Return Of <br/>The Jetta
       </h3>
       <p class="text-sm text-black/50 dark:text-white/50 font-medium leading-relaxed mb-6">
-        The Vikings say they're confident, but the clock is ticking and teams like the Panthers and Patriots are circling.
-      </p>
+After a down season, Justin Jefferson's spot as a top 3 WR is in question. He's on a mission to reclaim Leauge WR-1. </p>
       <a href="#" class="inline-flex items-center gap-2 text-black dark:text-white text-[10px] font-black uppercase tracking-widest border-b-2 border-black dark:border-white pb-1 hover:border-red-600 transition-all">
         Read Full Story
       </a>
@@ -743,15 +876,14 @@ filter: invert(1) brightness(2);
   </article>
 
   <article class="group relative bg-white dark:bg-neutral-900 rounded-[2.5rem] overflow-hidden border border-black/5 dark:border-white/10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-    <div class="relative h-64 overflow-hidden">
+<div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
       <img src="images/trae.webp" 
            class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" />
       <div class="absolute inset-0"></div>
     </div>
     <div class="p-8">
-      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-3 block">Front Office</span>
       <h3 class="text-2xl font-black uppercase  tracking-tighter leading-none mb-4 group-hover:text-red-600 transition-colors">
-        Young Involved in <br/>Offseason Decision
+        Throne <br/>Over Ring?
       </h3>
       <p class="text-sm text-black/50 dark:text-white/50 font-medium leading-relaxed mb-6">
         Sources say the Hawks consulted Young before finalizing their next head coach, a rare glimpse at star-level influence.
@@ -776,11 +908,16 @@ filter: invert(1) brightness(2);
   <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12">
     <div class="md:w-2/3">
       <div class="flex items-center gap-2 mb-4">
-        <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-red-600">Flagship Show</h2>
+        <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-600">Flagship Show</h2>
       </div>
-      <h2 class="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter leading-none text-black dark:text-white">The Lithouse <br/><span class="text-black/20 dark:text-white/20">Lounge</span></h2>
+<h2 class="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter leading-none">
+    <span class="lounge-title-gradient">Greenlight</span> <br/>
+    <span class="text-black/20 dark:text-white/20">Lounge</span>
+</h2>
+
+
       <p class="text-xl text-black/50 dark:text-white/50 mb-8 font-medium max-w-xl">Unfiltered conversations, bold takes, and behind-the-scenes stories from the world of sports. Hosted every Thursday at 8 PM ET.</p>
-      <a href="#" class="bg-black dark:bg-white dark:text-black text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white transition-all inline-block">Watch Latest Episode</a>
+      <a href="#" class="bg-black dark:bg-white dark:text-black text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white transition-all inline-block">Coming Soon</a>
     </div>
 
 <div class="md:w-1/3 w-full">
@@ -793,7 +930,7 @@ filter: invert(1) brightness(2);
     </div>
     <div class="absolute bottom-8 left-8 right-8">
        <div class="h-1 w-full bg-white/20 rounded-full overflow-hidden">
-          <div class="h-full bg-red-600 w-1/3 shadow-[0_0_15px_rgba(220,38,38,1)]"></div>
+<div class="h-full bg-green-500 w-1/3 shadow-[0_0_15px_rgba(34,197,94,1)]"></div>
        </div>
     </div>
   </div>
@@ -801,65 +938,133 @@ filter: invert(1) brightness(2);
 
 
 </div>
-</section><!-- Footer --><footer class="bg-white dark:bg-black border-t border-black/5 dark:border-white/10 pt-24 pb-12">
-  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
+</section><!-- Footer -->
+<style>
+    .footer-text {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.01em;
+</style>
+
+
+
+<footer class="bg-white dark:bg-black border-t border-black/5 dark:border-white/10 pt-5 pb-12">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24 items-start">
 
 <div>
-  <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-black/30 dark:text-white/30">📬 Newsletter</h3>
-  <p class="mb-6 text-xs font-bold text-black/40 dark:text-white/40 leading-relaxed uppercase tracking-widest">Get the hottest sports news, fresh takes, and live alerts.</p>
+  <h3 class="footer-text text-[10px] font-black tracking-[0.4em] mb-6 text-black/30 uppercase dark:text-white/30">📬 Newsletter</h3>
+  <p class="footer-text mb-6 text-xs text-black/40 dark:text-white/40 leading-relaxed tracking-widest">Get the hottest sports news, fresh takes, and live alerts.</p>
   <div class="flex border-b-2 border-black dark:border-white pb-2">
     <input type="email" placeholder="EMAIL ADDRESS" class="bg-transparent w-full text-[10px] font-black outline-none uppercase tracking-widest text-black dark:text-white placeholder-black/40 dark:placeholder-white/40">
     <button class="text-[10px] font-black uppercase tracking-widest hover:text-red-600 transition text-black dark:text-white">Join</button>
   </div>
 </div>
 
-<div class="md:pl-10">
-  <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-black/30 dark:text-white/30">Explore</h3>
-  <ul class="space-y-3 text-[10px] font-black uppercase tracking-[0.2em] text-black dark:text-white">
-    <li><a href="#" class="hover:text-red-600 transition">About Us</a></li>
-    <li><a href="#" class="hover:text-red-600 transition">Careers</a></li>
-    <li><a href="#" class="hover:text-red-600 transition">Privacy</a></li>
-    <li><a href="#" class="hover:text-red-600 transition">Contact</a></li>
-  </ul>
-</div>
 
 <div>
   <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-black/30 dark:text-white/30">Connect</h3>
   <div class="flex space-x-4">
-    <a href="https://x.com/revlithouse?s=21" class="w-10 h-10 border border-black/5 dark:border-white/10 rounded-full flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition text-black dark:text-white">
-       <svg viewBox="0 0 1200 1227" class="h-4 w-4" fill="currentColor"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg>
-    </a>
-    <a href="#" class="w-10 h-10 border border-black/5 dark:border-white/10 rounded-full flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition text-black dark:text-white">
-       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 0 0-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.017 3.017 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-       </svg>
-    </a>
+<a href="https://x.com/qb_vision?s=21" class="w-10 h-10 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+   <svg viewBox="0 0 1200 1227" class="h-4 w-4" fill="currentColor"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg>
+</a>
+<a href="#" class="w-10 h-10 bg-[#FF0000] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505a3.017 3.017 0 0 0-2.122 2.136C0 8.055 0 12 0 12s0 3.945.501 5.814a3.017 3.017 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.945 24 12 24 12s0-3.945-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+   </svg>
+</a>
+
   </div>
 </div>
 
 <div>
   <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-black/30 dark:text-white/30">Mobile</h3>
   <div class="space-y-2">
-    <div class="h-10 bg-black dark:bg-white rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-red-600 dark:hover:bg-red-600 transition">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white" class="h-4 w-4 dark:fill-black">
-        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-18.1-81.9-18.1-41.9 0-82.5 24.5-104.2 60.3-43.1 72.3-10.6 182.2 31.3 241.6 20.2 29.5 45.1 63.8 77.1 62.6 30.7-1.1 41.1-20.2 78.4-20.2 37.3 0 48 20.2 80 19.1 33-1.1 55.4-31 75.4-59.7 22.8-33.1 32.2-65.1 32.5-66.8-.7-.3-62.8-24.3-63.4-96.1zM289 80.4c17.1-20.8 28.1-49.3 25-77.9-24.5 1-53.7 16.3-71.3 36.9-15.6 18.2-29.4 46.9-25.7 75.1 27 2.1 54.9-13.3 72-34.1z"/>
-      </svg>
-      <span class="text-[10px] font-black text-white dark:text-black uppercase tracking-widest">App Store</span>
-    </div>
-    <div class="h-10 border border-black/10 dark:border-white/10 rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition group">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="h-4 w-4 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition">
-        <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-10.3 18-28.5-1.2-40.8zM325.3 277.7l60.1 60.1L104.6 499l220.7-221.3z"/>
-      </svg>
-      <span class="text-[10px] font-black uppercase tracking-widest text-black dark:text-white">Play Store</span>
-    </div>
+<div class="coming-soon h-10 bg-[#000000] rounded flex items-center justify-center gap-2 cursor-pointer transition shadow-lg">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="h-4 w-4 fill-white">
+    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-51.1-18.1-81.9-18.1-41.9 0-82.5 24.5-104.2 60.3-43.1 72.3-10.6 182.2 31.3 241.6 20.2 29.5 45.1 63.8 77.1 62.6 30.7-1.1 41.1-20.2 78.4-20.2 37.3 0 48 20.2 80 19.1 33-1.1 55.4-31 75.4-59.7 22.8-33.1 32.2-65.1 32.5-66.8-.7-.3-62.8-24.3-63.4-96.1zM289 80.4c17.1-20.8 28.1-49.3 25-77.9-24.5 1-53.7 16.3-71.3 36.9-15.6 18.2-29.4 46.9-25.7 75.1 27 2.1 54.9-13.3 72-34.1z"/>
+  </svg>
+  <span class="text-[10px] font-black text-white uppercase tracking-widest">App Store</span>
+</div>
+
+  <div class="coming-soon h-10 bg-white border border-gray-200 rounded flex items-center justify-center gap-2 cursor-pointer hover:shadow-md transition px-4">
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" 
+      alt="Google Play Store" 
+      class="h-5 w-5"
+    />
+    <span class="text-[10px] font-black uppercase tracking-widest text-black">Play Store</span>
+  </div>
+
+
+
   </div>
 </div>
 
 
 </div><div class="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-black/5 dark:border-white/10 flex justify-between items-center text-[10px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.5em]">
-    <span>© 2026 Lithouse Network</span>
+    <span>© 2026 Greenlight Network LLC</span>
   </div>
-</footer><script>
+</footer>
+<script>
+function openVideoModal(videoSrc, title, subtitle) {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('popupVideo');
+    const container = document.getElementById('videoContainer');
+
+    // Reset
+    cancelAnimationFrame(videoRafId);
+    video.pause();
+    video.src = '';
+
+    // Force inline + muted -- REQUIRED to prevent iOS fullscreen takeover
+    video.muted = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('x-webkit-airplay', 'deny');
+
+    video.src = videoSrc;
+    video.load();
+
+    document.getElementById('videoPopupTitle').innerText = title;
+    document.getElementById('videoPopupSub').innerText = subtitle;
+    // Sync mute button to show muted state
+    document.getElementById('muteBtn').querySelector('i').className = 'fa-solid fa-volume-xmark text-sm';
+
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+    }, 50);
+    document.body.style.overflow = 'hidden';
+
+    video.addEventListener('loadedmetadata', () => {
+        document.getElementById('videoDuration').innerText = formatTime(video.duration);
+    }, { once: true });
+
+    video.addEventListener('timeupdate', () => {
+        const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+        document.getElementById('videoProgressBar').style.width = pct + '%';
+        document.getElementById('videoCurrentTime').innerText = formatTime(video.currentTime);
+    });
+
+    video.play().then(() => {
+        document.getElementById('playPauseBtn').querySelector('i').className = 'fa-solid fa-pause text-sm';
+        drawVideoFrame();
+    }).catch(() => {});
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('popupVideo');
+    const container = document.getElementById('videoContainer');
+
+    container.classList.add('scale-95');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    
+    video.pause();
+    video.src = "";
+    document.body.style.overflow = 'auto';
+}
+
 
 // Toggle User Dashboard
 function toggleUserDashboard() {
@@ -884,7 +1089,7 @@ function toggleUserDashboard() {
       {
         label: "ORIGINAL",
         headline: "Art vs \nAlgorithm",
-        subhead: "In this episode, Rev unpacks why some players just got it, and others are still trying to replicate it.",
+        subhead: "In this episode, Sa'iid unpacks why some players just got it, and others are still trying to replicate it.",
         image: "images/rev.webp"
       }
     ];
@@ -1408,5 +1613,549 @@ function closeGameModal() {
 
 loadGames();
 setInterval(loadGames, 30000); // 30s refresh is better for live data
-</script></body>
+</script>
+<button onclick="toggleChat()" class="fixed bottom-6 right-6 z-[100] w-10 h-10 bg-green-600 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all group">
+    <i class="fa-solid fa-comments text-white text-xl group-hover:rotate-12 transition-transform"></i>
+    
+    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 border-2 border-white dark:border-black rounded-full animate-pulse"></span>
+</button>
+
+<div id="chatWindow" class="fixed bottom-24 right-6 z-[100] w-[350px] h-[500px] ios-glass rounded-[2.5rem] flex flex-col shadow-2xl translate-y-[120%] opacity-0 pointer-events-none transition-all duration-500 ease-in-out border border-white/20">
+    <div class="p-5 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+        <div>
+            <div class="flex items-center gap-1.5 mt-1">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                <span class="text-[9px] font-bold opacity-40 uppercase dark:text-white">1,240 Online</span>
+            </div>
+        </div>
+        <button onclick="toggleChat()" class="text-black dark:text-white opacity-40 hover:opacity-100 transition-opacity text-xl">&times;</button>
+    </div>
+
+    <div class="flex p-2 gap-2 overflow-x-auto no-scrollbar border-b border-black/5 dark:border-white/5">
+        <button class="px-4 py-1.5 rounded-full bg-black dark:bg-white text-white dark:text-black text-[9px] font-black uppercase tracking-widest">Lobby</button>
+        <button class="px-4 py-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-[9px] font-black uppercase tracking-widest dark:text-white/40">Gifts</button>
+        <button class="px-4 py-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-[9px] font-black uppercase tracking-widest dark:text-white/40">NBA</button>
+    </div>
+
+    <div class="flex-grow overflow-y-auto p-5 space-y-4 no-scrollbar">
+        <div class="flex gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-500 flex-shrink-0 flex items-center justify-center text-[10px] font-black">JD</div>
+            <div class="space-y-1">
+                <p class="text-[9px] font-black opacity-30 uppercase dark:text-white">J_4092<span class="text-red-500 ml-2">GIFTED 💎</span></p>
+                <div class="bg-black/5 dark:bg-white/10 p-3 rounded-2xl rounded-tl-none text-xs font-medium dark:text-gray-200">
+🔥🔥🔥🔥🔥🔥🔥                </div>
+            </div>
+        </div>
+        
+        <div class="text-center py-2">
+            <p class="text-[8px] font-black uppercase tracking-[0.2em] text-amber-500 bg-amber-500/10 inline-block px-3 py-1 rounded-full">User_92 sent a [Golden Hoop] to______</p>
+        </div>
+    </div>
+
+    <div class="p-4 border-t border-black/5 dark:border-white/10 bg-white/50 dark:bg-black/20 backdrop-blur-md rounded-b-[2.5rem]">
+        <div class="relative">
+<input type="text" placeholder="" class="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl py-4 pl-5 pr-12 text-base font-medium tracking-widest outline-none focus:border-red-600 transition-colors dark:text-white">
+            <button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-red-600">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.classList.toggle('translate-y-[120%]');
+    chatWindow.classList.toggle('opacity-0');
+    chatWindow.classList.toggle('pointer-events-none');
+}
+
+// ── PLAYER STATS MODAL ──────────────────────────────────────────────────────
+
+const playerStatsModal = document.createElement('div');
+playerStatsModal.id = 'playerStatsModal';
+playerStatsModal.className = 'fixed inset-0 z-[200] hidden items-center justify-center p-4';
+playerStatsModal.innerHTML = `
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="closePlayerModal()"></div>
+    <div id="playerModalContainer" class="relative w-full max-w-md bg-white dark:bg-[#0f0f0f] rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)] border border-black/10 dark:border-white/10 scale-95 opacity-0 transition-all duration-300">
+        
+        <button onclick="closePlayerModal()" class="absolute top-5 right-6 text-3xl font-light hover:rotate-90 transition-transform dark:text-white opacity-40 hover:opacity-100 z-10">&times;</button>
+
+        <div id="playerModalHeader" class="p-8 pb-6 border-b border-black/5 dark:border-white/5">
+            <div class="flex items-center gap-5">
+                <div class="relative">
+                    <img id="playerModalHeadshot" src="" alt="" class="w-20 h-20 rounded-2xl object-cover object-top bg-gray-100 dark:bg-neutral-800">
+                    <div id="playerModalTeamBadge" class="absolute -bottom-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center border-2 border-white dark:border-[#0f0f0f] overflow-hidden bg-gray-100">
+                        <img id="playerModalTeamLogo" src="" class="w-6 h-6 object-contain">
+                    </div>
+                </div>
+                <div>
+                    <h3 id="playerModalName" class="text-2xl font-black uppercase tracking-tighter leading-none dark:text-white"></h3>
+                    <p id="playerModalMeta" class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1.5 dark:text-white"></p>
+                    <div id="playerModalStatus" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="playerModalBody" class="p-8">
+            <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500 mb-6">2024–25 Season Averages</h4>
+            <div id="playerStatsGrid" class="grid grid-cols-3 gap-3"></div>
+            <div id="playerModalLoader" class="text-center py-12 text-sm opacity-40 dark:text-white">Loading stats...</div>
+        </div>
+    </div>
+`;
+document.body.appendChild(playerStatsModal);
+
+function openPlayerModal(athleteId, teamAbbr) {
+    const modal = document.getElementById('playerStatsModal');
+    const container = document.getElementById('playerModalContainer');
+
+    // Reset
+    document.getElementById('playerStatsGrid').innerHTML = '';
+    document.getElementById('playerModalLoader').style.display = 'block';
+    document.getElementById('playerModalLoader').innerText = 'Loading stats...';
+    document.getElementById('playerModalName').innerText = '';
+    document.getElementById('playerModalMeta').innerText = '';
+    document.getElementById('playerModalStatus').innerHTML = '';
+    document.getElementById('playerModalHeadshot').src = '';
+    document.getElementById('playerModalTeamLogo').src = '';
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        container.classList.remove('scale-95', 'opacity-0');
+        container.classList.add('scale-100', 'opacity-100');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+
+    fetchPlayerSeasonStats(athleteId, teamAbbr);
+}
+
+function closePlayerModal() {
+    const container = document.getElementById('playerModalContainer');
+    container.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        document.getElementById('playerStatsModal').classList.add('hidden');
+        document.getElementById('playerStatsModal').classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }, 300);
+}
+
+async function fetchPlayerSeasonStats(athleteId, teamAbbr) {
+    const color = getSafeTeamColor(teamAbbr);
+    try {
+        const res = await fetch(`https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${athleteId}/overview`);
+        const data = await res.json();
+
+        const athlete = data.athlete;
+        const displayName = athlete.displayName || athlete.fullName || 'Unknown';
+        const position = athlete.position?.abbreviation || '';
+        const jersey = athlete.jersey ? `#${athlete.jersey}` : '';
+        const teamName = athlete.team?.displayName || teamAbbr;
+        const headshotUrl = athlete.headshot?.href || `https://a.espncdn.com/i/headshots/nba/players/full/${athleteId}.png`;
+        const teamLogoUrl = athlete.team?.logos?.[0]?.href || `https://a.espncdn.com/i/teamlogos/nba/500/${teamAbbr.toLowerCase()}.png`;
+        const injuryStatus = athlete.injuries?.[0];
+
+        document.getElementById('playerModalName').innerText = displayName;
+        document.getElementById('playerModalMeta').innerText = `${position} · ${jersey} · ${teamName}`;
+        document.getElementById('playerModalHeadshot').src = headshotUrl;
+        document.getElementById('playerModalTeamLogo').src = teamLogoUrl;
+
+        if (injuryStatus) {
+            document.getElementById('playerModalStatus').innerHTML = `
+                <span class="text-[9px] font-black uppercase px-2 py-1 rounded-full" style="background:${color}20; color:${color}">
+                    ⚠ ${injuryStatus.status} – ${injuryStatus.shortComment || injuryStatus.type}
+                </span>`;
+        }
+
+        // Pull season stats from the stats array
+        const statsCategory = data.stats?.find(s => s.type === 'total' || s.type === 'average');
+        const statLabels = data.stats?.[0]?.labels || [];
+        const statValues = data.stats?.[0]?.stats || [];
+
+        // Build a lookup map
+        const statsMap = {};
+        statLabels.forEach((label, i) => { statsMap[label] = statValues[i]; });
+
+        // Prefer averages endpoint as fallback
+        const statDisplays = [
+            { key: 'avgPoints',       label: 'PTS',  fallback: 'points' },
+            { key: 'avgRebounds',     label: 'REB',  fallback: 'rebounds' },
+            { key: 'avgAssists',      label: 'AST',  fallback: 'assists' },
+            { key: 'avgSteals',       label: 'STL',  fallback: 'steals' },
+            { key: 'avgBlocks',       label: 'BLK',  fallback: 'blocks' },
+            { key: 'avgTurnovers',    label: 'TOV',  fallback: 'turnovers' },
+            { key: 'fieldGoalPct',    label: 'FG%',  fallback: 'fieldGoalPct' },
+            { key: 'threePointPct',   label: '3P%',  fallback: 'threePointPct' },
+            { key: 'freeThrowPct',    label: 'FT%',  fallback: 'freeThrowPct' },
+        ];
+
+        // ESPN's athlete overview embeds season stats under data.splits or data.athlete.stats
+        const splits = data.splits?.categories || [];
+        const avgCategory = splits.find(c => c.type === 'perGame' || c.name === 'perGame') || splits[0];
+        const avgStats = avgCategory?.stats || [];
+        const avgMap = {};
+        avgStats.forEach(s => { avgMap[s.name] = s.displayValue ?? s.value; });
+
+        document.getElementById('playerModalLoader').style.display = 'none';
+
+        const grid = document.getElementById('playerStatsGrid');
+        grid.innerHTML = '';
+
+        const featured = [
+            { name: 'points',       label: 'PTS' },
+            { name: 'rebounds',     label: 'REB' },
+            { name: 'assists',      label: 'AST' },
+            { name: 'steals',       label: 'STL' },
+            { name: 'blocks',       label: 'BLK' },
+            { name: 'turnovers',    label: 'TO'  },
+            { name: 'fieldGoalPct', label: 'FG%' },
+            { name: 'threePointPct',label: '3P%' },
+            { name: 'freeThrowPct', label: 'FT%' },
+        ];
+
+        let hasStats = false;
+        featured.forEach(stat => {
+            const val = avgMap[stat.name];
+            if (val !== undefined && val !== null) {
+                hasStats = true;
+                const isPrimary = ['points','rebounds','assists'].includes(stat.name);
+                grid.innerHTML += `
+                    <div class="bg-black/[0.03] dark:bg-white/5 rounded-2xl p-4 border border-black/5 dark:border-white/5 text-center ${isPrimary ? 'col-span-1' : ''}">
+                        <p class="text-[9px] font-black uppercase tracking-widest opacity-40 dark:text-white mb-1">${stat.label}</p>
+                        <p class="text-2xl font-black tracking-tighter" style="color:${isPrimary ? color : 'inherit'}">${parseFloat(val).toFixed(isPrimary ? 1 : (stat.label.includes('%') ? 1 : 1))}</p>
+                    </div>`;
+            }
+        });
+
+        if (!hasStats) {
+            grid.innerHTML = `<div class="col-span-3 text-center py-6 opacity-40 text-sm dark:text-white">No season stats available</div>`;
+        }
+
+    } catch (err) {
+        console.error('Player stats error:', err);
+        document.getElementById('playerModalLoader').innerText = 'Could not load stats. ESPN API may be unavailable.';
+    }
+}
+
+// ── PATCH BOX SCORE TO MAKE PLAYER NAMES CLICKABLE ──────────────────────────
+
+// Override the box score renderer to inject clickable names
+const _origOpenGameModal = openGameModal;
+window.openGameModal = async function(gameId) {
+    await _origOpenGameModal(gameId);
+    // After modal data loads, patch player names
+    setTimeout(patchPlayerNames, 800);
+};
+
+function patchPlayerNames() {
+    const tbody = document.getElementById('modalBoxScoreBody');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 3) return;
+        const nameCell = cells[0];
+        const teamCell = cells[1];
+        const name = nameCell.innerText.trim();
+        const teamAbbr = teamCell.innerText.trim();
+        if (!name || name.length < 2 || !teamAbbr) return;
+        // Look up athlete ID from our cached game data
+        const athleteId = window._athleteIdMap?.[name];
+        if (athleteId) {
+            nameCell.innerHTML = `<button onclick="openPlayerModal('${athleteId}','${teamAbbr}')" class="font-bold hover:underline text-left transition-colors hover:text-amber-500 dark:text-white">${name}</button>`;
+        }
+    });
+}
+
+// ── PATCH openGameModal TO BUILD ATHLETE ID MAP ───────────────────────────────
+
+const __origFetch = window.openGameModal;
+window._athleteIdMap = {};
+
+// We intercept the summary data to harvest athlete IDs
+const _origOpen = openGameModal;
+window.openGameModal = async function(gameId) {
+    window._athleteIdMap = {};
+    try {
+        const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${gameId}`);
+        const data = await res.json();
+        // Build athlete ID map from boxscore
+        data.boxscore?.players?.forEach(teamGroup => {
+            teamGroup.statistics?.forEach(statSet => {
+                statSet.athletes?.forEach(p => {
+                    if (p.athlete?.displayName && p.athlete?.id) {
+                        window._athleteIdMap[p.athlete.displayName] = p.athlete.id;
+                    }
+                });
+            });
+        });
+    } catch(e) {}
+    await _origOpenGameModal(gameId);
+    setTimeout(patchPlayerNames, 900);
+};
+const articleEngineData = {
+    "wemby-mvp": {
+        tag: "NBA Awards",
+        time: "8 MIN READ",
+        title: "The Case For Youngest NBA MVP Ever",
+        content: `
+            <p>Dethroning Derrick Rose as the youngest MVP in league history isn't just a statistical goal--it's the official inauguration of the Wembanyama era.</p>
+            <div class="my-10 p-8 border-l-4 border-amber-500 bg-black/5 dark:bg-white/5 rounded-r-2xl">
+                <p class="text-2xl font-black italic tracking-tight">"We aren't watching a player develop; we're watching the sport's physics being rewritten in real-time."</p>
+            </div>
+            <p>What makes the 2026 campaign different is the efficiency. Victor is no longer just a defensive anchor; he's operating as a primary playmaker from the high post, forcing double teams that the Spurs are finally equipped to punish.</p>
+        `
+    },
+    "jett-return": {
+        tag: "NFL Offseason",
+        time: "6 MIN READ",
+        title: "Return Of The Jett",
+        content: `
+            <p>After a season plagued by quarterback instability and nagging injuries, Justin Jefferson is entering 2026 with a singular focus: reclaiming the undisputed title of WR1.</p>
+            <p>Training camp footage suggests a player who hasn't just recovered, but has added a new layer of vertical explosiveness. Analysts are pointing to his route-running precision at the 'break point' as the sharpest it has ever been.</p>
+        `
+    }
+};
+function openReader(id) {
+    const data = articleEngineData[id];
+    if(!data) return;
+
+    // Save current scroll position
+    window._savedScrollY = window.scrollY;
+
+    const reader = document.getElementById('greenlightReader');
+    document.getElementById('rtitle').innerText = data.title;
+    document.getElementById('rtag').innerText = data.tag;
+    document.getElementById('rbody').innerHTML = data.content;
+
+    reader.classList.remove('hidden');
+    void reader.offsetWidth;
+    reader.classList.add('active');
+    
+    // Lock body without jumping -- use top offset trick
+    document.body.style.top = `-${window._savedScrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+}
+
+function closeReader() {
+    const reader = document.getElementById('greenlightReader');
+    reader.classList.remove('active');
+
+    // Restore body scroll IMMEDIATELY -- don't wait for reader to finish sliding out
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, window._savedScrollY || 0);
+
+    setTimeout(() => {
+        reader.classList.add('hidden');
+    }, 600);
+}
+
+let videoRafId = null;
+
+function drawVideoFrame() {
+    const v = document.getElementById('popupVideo');
+    const canvas = document.getElementById('videoCanvas');
+    if (!canvas || !v) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = v.videoWidth || canvas.offsetWidth;
+    canvas.height = v.videoHeight || canvas.offsetHeight;
+    ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+    videoRafId = requestAnimationFrame(drawVideoFrame);
+}
+
+function toggleVideoPlay() {
+    const v = document.getElementById('popupVideo');
+    const btn = document.getElementById('playPauseBtn').querySelector('i');
+    if (v.paused) {
+        v.play();
+        btn.className = 'fa-solid fa-pause text-sm';
+        drawVideoFrame();
+    } else {
+        v.pause();
+        btn.className = 'fa-solid fa-play text-sm';
+        cancelAnimationFrame(videoRafId);
+    }
+}
+
+function toggleVideoMute() {
+    const v = document.getElementById('popupVideo');
+    const btn = document.getElementById('muteBtn').querySelector('i');
+    v.muted = !v.muted;
+    btn.className = v.muted ? 'fa-solid fa-volume-xmark text-sm' : 'fa-solid fa-volume-high text-sm';
+}
+
+function seekVideo(e, bar) {
+    const v = document.getElementById('popupVideo');
+    const rect = bar.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    v.currentTime = pct * v.duration;
+}
+
+function formatTime(s) {
+    const m = Math.floor(s / 60);
+    return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+}
+
+// Update your openVideoModal to use canvas
+function openVideoModal(videoSrc, title, subtitle) {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('popupVideo');
+    const container = document.getElementById('videoContainer');
+
+    video.src = videoSrc;
+    document.getElementById('videoPopupTitle').innerText = title;
+    document.getElementById('videoPopupSub').innerText = subtitle;
+
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+    }, 50);
+
+    document.body.style.overflow = 'hidden';
+
+    video.addEventListener('loadedmetadata', () => {
+        document.getElementById('videoDuration').innerText = formatTime(video.duration);
+    }, { once: true });
+
+    video.addEventListener('timeupdate', () => {
+        const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+        document.getElementById('videoProgressBar').style.width = pct + '%';
+        document.getElementById('videoCurrentTime').innerText = formatTime(video.currentTime);
+    });
+
+    video.play().then(() => {
+        document.getElementById('playPauseBtn').querySelector('i').className = 'fa-solid fa-pause text-sm';
+        drawVideoFrame();
+    }).catch(() => {});
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('popupVideo');
+    const container = document.getElementById('videoContainer');
+
+    cancelAnimationFrame(videoRafId);
+    container.classList.add('scale-95');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+
+    video.pause();
+    video.src = '';
+    document.getElementById('playPauseBtn').querySelector('i').className = 'fa-solid fa-play text-sm';
+    document.body.style.overflow = 'auto';
+}
+
+
+</script>
+
+</body>
+<div id="greenlightReader" class="fixed inset-0 z-[300] bg-white dark:bg-[#0a0a0a] translate-x-full reader-transition overflow-y-auto hidden">
+    <button onclick="closeReader()" class="fixed top-6 right-6 z-[310] w-12 h-12 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/5 backdrop-blur-xl text-black dark:text-white hover:scale-110 transition-all">
+        <i class="fa-solid fa-xmark text-xl"></i>
+    </button>
+
+    <div class="max-w-4xl mx-auto px-6 pt-32 pb-20 reader-content-fade">
+        <div class="flex items-center gap-4 mb-8">
+            <span id="rtag" class="text-red-600 text-[10px] font-black uppercase tracking-[0.3em] px-3 py-1 bg-red-600/10 rounded-full">NFL Analysis</span>
+        </div>
+
+        <h1 id="rtitle" class="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-10 dark:text-white"></h1>
+
+        <div class="flex items-center justify-between py-6 border-y border-black/5 dark:border-white/10 mb-12">
+            <div class="flex gap-6">
+                <button class="flex items-center gap-2 group text-black dark:text-white">
+                    <i class="fa-regular fa-heart group-hover:text-red-500 transition-colors"></i> 
+                    <span class="text-xs font-black">2.4k</span>
+                </button>
+                <button class="flex items-center gap-2 group text-black dark:text-white">
+                    <i class="fa-regular fa-comment group-hover:text-amber-500 transition-colors"></i> 
+                    <span class="text-xs font-black">182</span>
+                </button>
+            </div>
+            <button class="text-[10px] font-black uppercase tracking-widest text-black dark:text-white hover:text-red-600 transition-colors">
+                <i class="fa-solid fa-share-nodes mr-2"></i> Share Story
+            </button>
+        </div>
+
+        <div id="rbody" class="prose prose-lg dark:prose-invert max-w-none text-black/80 dark:text-white/80 text-lg md:text-xl leading-relaxed space-y-8 font-medium">
+            </div>
+    </div>
+</div>
+<div id="videoModal" class="fixed inset-0 z-[400] bg-black/98 backdrop-blur-3xl flex flex-col opacity-0 pointer-events-none transition-all duration-700 overflow-y-auto no-scrollbar">
+    
+    <button onclick="closeVideoModal()" class="fixed top-8 right-8 z-[450] w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white hover:bg-red-600 hover:scale-110 transition-all duration-300">
+        <i class="fa-solid fa-xmark text-xl"></i>
+    </button>
+
+    <div class="w-full max-w-[1600px] mx-auto px-6 py-20 flex flex-col lg:flex-row gap-12 min-h-screen items-center">
+        
+        <div class="w-full lg:w-[70%] flex flex-col scale-95 transition-all duration-700" id="videoContainer">
+<!-- In your #videoModal, replace the video wrapper div with this -->
+<div class="group relative aspect-video rounded-[3rem] overflow-hidden shadow-[0_0_120px_rgba(34,197,94,0.15)] border border-white/10 bg-black">
+    <!-- Hidden video -- never shown, just used as data source -->
+<video id="popupVideo" class="hidden" playsinline webkit-playsinline muted></video>
+    
+    <!-- Canvas renders the video frames -- no native controls ever appear -->
+    <canvas id="videoCanvas" class="w-full h-full object-contain"></canvas>
+
+    <!-- Your custom controls -->
+    <div class="absolute bottom-5 left-5 right-5 flex items-center gap-4 px-4 py-3 rounded-2xl bg-black/50 backdrop-blur-md border border-white/10">
+        <button onclick="toggleVideoPlay()" id="playPauseBtn" class="text-white hover:text-amber-400 transition-colors flex-shrink-0">
+            <i class="fa-solid fa-play text-sm"></i>
+        </button>
+        <span id="videoCurrentTime" class="text-white text-[11px] font-black tabular-nums">0:00</span>
+        <div class="flex-1 h-1 bg-white/20 rounded-full overflow-hidden cursor-pointer" onclick="seekVideo(event, this)">
+            <div id="videoProgressBar" class="h-full bg-amber-400 w-0 rounded-full pointer-events-none"></div>
+        </div>
+        <span id="videoDuration" class="text-white/50 text-[11px] font-black tabular-nums">0:00</span>
+        <button onclick="toggleVideoMute()" id="muteBtn" class="text-white hover:text-amber-400 transition-colors flex-shrink-0">
+            <i class="fa-solid fa-volume-high text-sm"></i>
+        </button>
+    </div>
+</div>
+
+
+            <div class="mt-12 space-y-4">
+                <div class="flex items-center gap-3">
+                    <span id="videoPopupSub" class="bg-amber-500 text-black text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.3em]"></span>
+                    <span class="text-white/20 text-[10px] font-black uppercase tracking-widest">Original Programming</span>
+                </div>
+                <h2 id="videoPopupTitle" class="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white leading-[0.85]"></h2>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-[30%] space-y-10 self-start lg:mt-12">
+            <div class="p-8 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-xl">
+                <h4 class="text-amber-500 text-[11px] font-black uppercase tracking-[0.4em] mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> Inside the Play
+                </h4>
+                <div id="videoExtraContent" class="text-white/60 text-lg leading-relaxed font-medium space-y-6">
+                    <p>This sequence captures the raw physical dominance required to compete at the highest level. Notice the shift in defensive rotation just before the break.</p>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-sm font-bold text-white uppercase tracking-widest">
+                            <span class="text-amber-500">01</span> Breakneck Transition
+                        </li>
+                        <li class="flex gap-3 text-sm font-bold text-white uppercase tracking-widest">
+                            <span class="text-amber-500">02</span> Aerial Supremacy
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <button class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-2xl">
+                    Save to My Highlights
+                </button>
+                <button class="w-full py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-white/10 transition-all">
+                    View Match Stats
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </html>
