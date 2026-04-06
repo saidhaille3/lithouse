@@ -309,8 +309,9 @@ filter: invert(1) brightness(2);
 <nav id="navbar" class="fixed top-0 w-full z-50 silver-nav px-2 py-4 flex justify-between items-center">
 <div class="flex items-center gap-4">
     <div class="relative w-9 h-9"> 
+    <a href="index.html" class="flex items-center space-x-3 group shrink-0">
         <img src="/images/logo.png" alt="The Greenlight Logo" class="transition-transform scale-150 origin-left translate-y-[4px] " />
-    </div>
+    </a>    </div>
     
     
 <span class="fire-text text-[1rem] font-extrabold tracking-tight ml-1 py-1">
@@ -748,7 +749,7 @@ filter: invert(1) brightness(2);
   </div>
 
   <!-- Grid: Player + Chat -->
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5 items-start">
+<div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5 items-start">
 
     <!-- ── Player Column ── -->
     <div class="space-y-5">
@@ -756,36 +757,61 @@ filter: invert(1) brightness(2);
       <!-- Player Card -->
       <div class="ios-glass rounded-[2rem] overflow-hidden shadow-xl">
         <!-- Video -->
-        <div class="player-ratio bg-black rounded-t-[2rem] overflow-hidden">
-          <mux-player
-            id="muxPlayer"
-            playback-id="TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk"
-            stream-type="live"
-            autoplay="muted"
-            muted
-            style="display:none; --controls:auto;"
-          ></mux-player>
+<div class="player-ratio bg-black rounded-t-[2rem] overflow-hidden relative">
+  <mux-player
+    id="muxPlayer"
+    playback-id="TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk"
+    stream-type="live"
+    autoplay="muted"
+    muted
+    style="display:none; --controls:auto;"
+  ></mux-player>
 
-          <!-- Offline Overlay -->
-          <div id="offlineOverlay" class="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-black/90 to-black">
-            <div class="w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center bg-white/5">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5">
-                <path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
-                <line x1="3" y1="3" x2="21" y2="21" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-              </svg>
-            </div>
-            <div class="text-center">
-              <p class="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Stream Offline</p>
-              <p class="text-[9px] font-bold text-white/15 uppercase tracking-widest mt-1">Waiting for broadcast…</p>
-            </div>
+  <div id="inPlayerChat" class="absolute inset-y-0 right-0 w-full md:w-1/3 z-50 pointer-events-none flex flex-col justify-end p-4 overflow-hidden">
+      <div id="playerChatMessages" class="flex flex-col gap-2 overflow-y-auto no-scrollbar max-h-[70%] mask-linear-gradient">
           </div>
-        </div>
+  </div>
 
-        <!-- Stream Info Bar -->
-        <div class="flex items-center justify-between px-6 py-4 border-t border-black/5 dark:border-white/5">
-          <div>
-            <p id="streamTitle" class="text-sm font-black uppercase tracking-tight dark:text-white">Waiting for stream…</p>
-          </div>
+  <div id="offlineOverlay" class="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-black/90 to-black">
+    <div class="w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center bg-white/5">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5">
+        <path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+        <line x1="3" y1="3" x2="21" y2="21" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="text-center">
+      <p class="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Stream Offline</p>
+      <p class="text-[9px] font-bold text-white/15 uppercase tracking-widest mt-1">Waiting for broadcast…</p>
+    </div>
+  </div>
+</div>
+<style>
+    #playerChatMessages {
+    mask-image: linear-gradient(to bottom, transparent, black 20%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+}
+
+.player-msg-anim {
+    animation: slideInRight 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Hide the old chat column on desktop since it's now in-player */
+@media (min-width: 1024px) {
+    .lg\:grid-cols-\[1fr_360px\] {
+        grid-template-columns: 1fr !important;
+    }
+    aside, .chat-column-class-if-exists { 
+        display: none !important; 
+    }
+}
+
+</style>
           <div id="viewerWrap" class="hidden items-center gap-2 bg-black/5 dark:bg-white/5 px-3 py-2 rounded-full">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-black/40 dark:text-white/40 viewers-pulse">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -800,46 +826,6 @@ filter: invert(1) brightness(2);
     </div>
 
     <!-- ── Chat Column ── -->
-    <div class="ios-glass rounded-[2rem] overflow-hidden shadow-xl flex flex-col lg:sticky lg:top-24" style="height: clamp(420px, calc(100vh - 120px), 720px);">
-
-      <!-- Chat Header -->
-      <div class="px-6 py-5 border-b border-black/5 dark:border-white/5 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-3">
-          <div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span class="text-[8px] font-bold text-black/30 dark:text-white/30 uppercase tracking-widest">Active</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Messages -->
-      <div id="chatMessages" class="flex-1 overflow-y-auto chat-scroll px-5 py-5 flex flex-col gap-3"></div>
-
-      <!-- Input Footer -->
-      <div class="px-4 py-4 border-t border-black/5 dark:border-white/5 flex-shrink-0">
-        <div class="flex gap-2 items-center">
-          <input
-            type="text"
-            id="chatInput"
-            placeholder="SAY SOMETHING…"
-            maxlength="200"
-            class="chat-input flex-1 bg-black/[0.04] border border-black/10 rounded-xl px-4 py-3.5 text-[10px] font-black uppercase tracking-widest outline-none transition-all"
-            onkeydown="if(event.key==='Enter') sendMsg()"
-          />
-          <button
-            onclick="sendMsg()"
-            class="w-11 h-11 rounded-xl bg-black dark:bg-white flex items-center justify-center flex-shrink-0 hover:bg-red-600 dark:hover:bg-red-600 transition-all active:scale-90 shadow-md"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="dark:stroke-black dark:group-hover:stroke-white">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
 
   </div>
 </main>
@@ -994,7 +980,9 @@ function playSound(key) {
     });
   }
 
-  function addChatMsg(name, text) {
+
+function addChatMsg(name, text) {
+    // Current existing logic for the bottom drawer/hidden chat
     const wrap = document.getElementById('chatMessages');
     const msg = document.createElement('div');
     msg.className = 'flex gap-3 msg-in';
@@ -1004,18 +992,27 @@ function playSound(key) {
         <p class="text-[9px] font-black uppercase tracking-widest mb-1 dark:text-white" style="color:${colorFor(name)}">${escHtml(name)}</p>
         <p class="text-[12px] font-medium text-black/70 dark:text-white/70 leading-snug break-words">${escHtml(text)}</p>
       </div>`;
-    wrap.appendChild(msg);
-    wrap.scrollTop = wrap.scrollHeight;
-  }
+    if(wrap) {
+        wrap.appendChild(msg);
+        wrap.scrollTop = wrap.scrollHeight;
+    }
 
-  function addSystemMsg(text) {
-    const wrap = document.getElementById('chatMessages');
-    const msg = document.createElement('div');
-    msg.className = 'msg-in';
-    msg.innerHTML = `<div class="text-center py-1"><span class="text-[8px] font-black uppercase tracking-[0.3em] text-black/25 dark:text-white/25 bg-black/[0.03] dark:bg-white/[0.05] px-3 py-1.5 rounded-full border border-black/5 dark:border-white/5">${escHtml(text)}</span></div>`;
-    wrap.appendChild(msg);
-    wrap.scrollTop = wrap.scrollHeight;
-  }
+    // NEW: Logic for the transparent in-player overlay
+    const playerWrap = document.getElementById('playerChatMessages');
+    const playerMsg = document.createElement('div');
+    playerMsg.className = 'player-msg-anim flex flex-col items-end mb-1 pr-2';
+    playerMsg.innerHTML = `
+        <span class="text-[10px] font-black uppercase tracking-tighter" style="color:${colorFor(name)}">${escHtml(name)}</span>
+        <span class="text-white text-sm font-semibold text-right leading-tight drop-shadow-lg">${escHtml(text)}</span>
+    `;
+    playerWrap.appendChild(playerMsg);
+    playerWrap.scrollTop = playerWrap.scrollHeight;
+    
+    // Auto-remove old messages from player to keep it clean
+    if(playerWrap.children.length > 10) {
+        playerWrap.removeChild(playerWrap.children[0]);
+    }
+}
 
   function escHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
