@@ -14,233 +14,142 @@
     </script>
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #ffffff; 
-            color: #111111; 
-            transition: all 0.4s ease;
-        }
+        /* --- CORE PAGE STYLES --- */
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #111111; transition: background-color 0.4s ease; overflow-x: hidden; }
         .dark body { background-color: #0a0a0a; color: #f4f4f4; }
+        .fire-text { background: linear-gradient(135deg, #062c06 0%, #0a4d0a 35%, #d4af37 65%, #926f12 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 900; }
+        .ios-glass { background: rgba(0, 0, 0, 0.03); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(0, 0, 0, 0.08); shadow: inset 0 1px 1px rgba(255,255,255,0.8); }
+        .dark .ios-glass { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.1); }
 
-        /* --- THE CINEMATIC PLAYER REDO --- */
-        .player-card {
-            position: relative;
-            width: 100%;
-            background: #000;
+        /* --- MEDIA PLAYER ELITE STYLING --- */
+        mux-player {
+            --media-button-icon-filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            --media-range-thumb-background: #d4af37;
+            --media-range-bar-color: #10b981;
+            --media-control-background: rgba(0, 0, 0, 0.6);
+            --primary-color: #d4af37;
             border-radius: 2rem;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .player-ratio {
-            position: relative;
-            padding-top: 56.25%; /* 16:9 */
-        }
+        /* 1. FORCE HIDE THE NATIVE BROWSER PLAY BUTTON (Conflicting icon) */
+        mux-player video::-webkit-media-controls { display:none !important; }
+        mux-player video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
 
-        .player-ratio > mux-player {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        /* Reach into Mux Shadow DOM to fix those messy buttons */
+        /* 2. CUSTOM FLOATING CONTROL BAR (The 'Lounge' Look) */
         mux-player::part(controls-container) {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: space-between;
-            padding: 0 16px !important;
-            bottom: 16px !important;
-            width: 92% !important;
-            left: 4% !important;
-            background: rgba(0, 0, 0, 0.6) !important;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.25rem;
-            height: 48px !important;
-            transition: opacity 0.3s ease;
+            padding: 15px;
         }
 
-        /* Kill the Pink Line & Center Clutter */
-        mux-player::part(timeline),
-        mux-player::part(seek-live),
-        mux-player::part(center-controls),
-        mux-player::part(label),
-        mux-player::part(time-display) {
-            display: none !important;
+        mux-player::part(control-bar) {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.3); /* Subtle gold border */
+            margin-bottom: 10px;
+            padding: 0 10px;
         }
 
-        mux-player::part(button) {
-            color: #ffffff !important;
-            --media-button-icon-width: 20px;
-        }
-
-        /* In-Player Chat Styling */
-        #inPlayerChat {
-            position: absolute;
-            inset: 0;
-            z-index: 40;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-            padding-bottom: 80px; /* Space for the new control bar */
-        }
-
-        #playerChatMessages {
-            mask-image: linear-gradient(to top, black 80%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
-        }
-
-        .msg-float {
-            animation: slideUpFade 0.4s ease-out forwards;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Common Styles */
-        .ios-glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        .fire-text {
-            background: linear-gradient(135deg, #062c06 0%, #10b981 50%, #d4af37 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 900;
-        }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* Center Play Button Fix */
+        mux-player::part(play-button) { color: #d4af37; transform: scale(1.2); }
     </style>
 </head>
+
 <body class="antialiased overflow-x-hidden">
 
-    <nav id="navbar" class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <img src="/images/logo.png" alt="Logo" class="w-8 h-8 scale-125" />
-            <span class="fire-text text-lg tracking-tighter">Greenlight</span>
-        </div>
-        <div class="flex items-center gap-4">
-            <button id="darkModeToggle" onclick="toggleDarkMode()" class="text-xl dark:text-amber-400"><i class="fa-solid fa-moon"></i></button>
-            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-200 p-[2px]">
-                <div class="w-full h-full rounded-full bg-black flex items-center justify-center">
-                    <i class="fa-solid fa-user text-[10px] text-white"></i>
-                </div>
+<nav id="navbar" class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-white/80 dark:bg-black/80 backdrop-blur-md">
+    <div class="flex items-center gap-2">
+        <span class="fire-text text-xl">Greenlight</span>
+    </div>
+    <div class="flex items-center gap-4">
+        <button onclick="document.documentElement.classList.toggle('dark')" class="text-amber-500"><i class="fa-solid fa-moon text-xl"></i></button>
+    </div>
+</nav>
+
+<section class="mt-24 px-4 md:px-8 max-w-5xl mx-auto">
+    <div class="group relative bg-black rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+        
+<mux-player
+    stream-type="live"
+    playback-id="TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk"
+    metadata-video-title="Live Stream: Greenlight Sports"
+    class="w-full aspect-video"
+    primary-color="#d4af37"
+    prefer-mse
+    playsinline
+></mux-player>
+
+        <div class="absolute top-6 left-6 pointer-events-none">
+            <div class="flex items-center gap-2 bg-red-600 px-3 py-1 rounded-full shadow-lg">
+                <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-white">Live</span>
             </div>
-        </div>
-    </nav>
-
-    <main class="mt-24 px-4 max-w-6xl mx-auto">
-        <div class="flex justify-between items-end mb-6">
-            <div class="space-y-1">
-                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 animate-pulse">● Live Broadcast</span>
-                <h1 class="text-3xl font-black tracking-tighter uppercase dark:text-white">The Lounge</h1>
-            </div>
-            <div id="statusPill" class="px-4 py-2 rounded-full border border-white/10 text-[9px] font-black uppercase tracking-widest opacity-50 dark:text-white">
-                Offline
-            </div>
-        </div>
-
-        <div class="player-card">
-            <div class="player-ratio">
-                <mux-player
-                    id="muxPlayer"
-                    playback-id="TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk"
-                    stream-type="live"
-                    autoplay="muted"
-                    muted
-                ></mux-player>
-
-                <div id="inPlayerChat">
-                    <div id="playerChatMessages" class="flex flex-col gap-2 overflow-y-auto no-scrollbar max-h-[180px]">
-                        </div>
-                </div>
-
-                <div id="offlineOverlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90">
-                    <i class="fa-solid fa-video-slash text-4xl text-white/10 mb-4"></i>
-                    <p class="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Awaiting Signal</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="modalBg" class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-        <div class="bg-white dark:bg-neutral-900 w-full max-w-xs rounded-[2.5rem] p-8 text-center shadow-2xl">
-            <h2 class="text-2xl font-black uppercase tracking-tighter mb-2 dark:text-white">Join the Live</h2>
-            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mb-6">Enter name to start chatting</p>
-            <input id="nameInput" type="text" placeholder="NAME" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl py-4 px-6 text-center text-sm font-black mb-4 dark:text-white outline-none">
-            <button onclick="setUsername()" class="w-full bg-red-600 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-red-600/20 active:scale-95 transition-transform">Enter →</button>
         </div>
     </div>
 
-    <script>
-        // Core Logic (Unaltered Keys/Endpoints)
-        const CONFIG = {
-            playbackId: 'TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk',
-            statusEndpoint: 'https://sportsite-79ty.onrender.com/api/stream-status',
-            pollInterval: 8000
-        };
+    <div class="mt-6 flex justify-between items-center px-2">
+        <div class="flex gap-4">
+            <button class="flex items-center gap-2 text-xs font-black uppercase tracking-widest dark:text-white group">
+                <div class="w-10 h-10 rounded-full ios-glass flex items-center justify-center group-hover:bg-amber-500 transition-all">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                Share
+            </button>
+            <button class="flex items-center gap-2 text-xs font-black uppercase tracking-widest dark:text-white group">
+                <div class="w-10 h-10 rounded-full ios-glass flex items-center justify-center group-hover:bg-red-600 transition-all">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                Favorite
+            </button>
+        </div>
+        <div class="text-right">
+            <p class="text-[10px] font-black uppercase opacity-40 dark:text-white tracking-[0.2em]">Current Viewers</p>
+            <p class="text-xl font-black dark:text-white tracking-tighter">12,402</p>
+        </div>
+    </div>
+</section>
 
-        let username = '';
-        let isLive = false;
+<div id="modalBg" class="fixed inset-0 z-[200] flex items-center justify-center p-5 bg-black/60 backdrop-blur-sm">
+  <div class="ios-glass w-full max-w-sm rounded-[2.5rem] p-10 text-center shadow-2xl bg-white dark:bg-neutral-900">
+      <h2 class="text-3xl font-black uppercase tracking-tighter dark:text-white mb-2">Join Stream</h2>
+      <p class="text-xs opacity-50 uppercase tracking-widest mb-8">Enter name to enter the lounge</p>
+      <input type="text" id="nameInput" placeholder="YOUR NAME" class="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-6 py-4 mb-4 outline-none focus:border-amber-500 transition-all dark:text-white" />
+      <button onclick="setUsername()" class="w-full bg-black dark:bg-white dark:text-black text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">Start Watching →</button>
+  </div>
+</div>
 
-        function setUsername() {
-            const val = document.getElementById('nameInput').value.trim();
-            if (!val) return;
-            username = val;
-            document.getElementById('modalBg').style.display = 'none';
+<script>
+    function setUsername() {
+        const name = document.getElementById('nameInput').value;
+        if(name.trim().length > 1) {
+            document.getElementById('modalBg').classList.add('hidden');
         }
+    }
 
-        function addChatMsg(name, text) {
-            const wrap = document.getElementById('playerChatMessages');
-            const msg = document.createElement('div');
-            msg.className = 'msg-float flex flex-col items-start pr-8';
-            msg.innerHTML = `
-                <span class="text-[9px] font-black uppercase tracking-tighter text-amber-500">${name}</span>
-                <span class="text-white text-sm font-bold leading-tight">${text}</span>
-            `;
-            wrap.appendChild(msg);
-            wrap.scrollTop = wrap.scrollHeight;
-            if(wrap.children.length > 8) wrap.removeChild(wrap.children[0]);
-        }
+    // Enter Key Support
+    document.getElementById('nameInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') setUsername();
+    });
+</script>
+<style>
+    /* 1. Target the internal video element specifically */
+mux-player::part(video) {
+    -webkit-media-controls: none !important;
+    -webkit-media-controls-enclosure: none !important;
+    display: block;
+}
 
-        async function pollStatus() {
-            try {
-                const res = await fetch(CONFIG.statusEndpoint);
-                const data = await res.json();
-                const overlay = document.getElementById('offlineOverlay');
-                const pill = document.getElementById('statusPill');
-                
-                if (data.live) {
-                    overlay.style.display = 'none';
-                    pill.innerText = '● Live';
-                    pill.classList.add('text-red-500', 'border-red-500/50');
-                } else {
-                    overlay.style.display = 'flex';
-                    pill.innerText = 'Offline';
-                    pill.classList.remove('text-red-500', 'border-red-500/50');
-                }
-            } catch (e) { console.error("Status Poll Failed"); }
-        }
+/* 2. Target the specific 'Big Play Button' Safari injects */
+mux-player video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    -webkit-appearance: none;
+}
 
-        setInterval(pollStatus, CONFIG.pollInterval);
-        
-        // Mock Chat for preview
-        setTimeout(() => addChatMsg('Alex', 'Let’s goooo! 🔥'), 2000);
-        setTimeout(() => addChatMsg('Jordan', 'Clean stream quality'), 4000);
+/* 3. Ensure the Mux controls are the ONLY ones visible */
+mux-player::part(controls-container) {
+    z-index: 10;
+}
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-    </script>
+</style>
 </body>
 </html>
