@@ -778,7 +778,51 @@ filter: invert(1) brightness(2);
     mask-image: linear-gradient(to bottom, transparent, black 20%);
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
 }
+/* --- CUSTOM PLAYER CONTROLS FIX --- */
+mux-player {
+    /* Hide the giant center play button for a cleaner look */
+    --media-button-icon-width: 20px;
+    --media-range-track-height: 4px;
+    --media-range-thumb-width: 12px;
+    --media-range-thumb-height: 12px;
+    --media-control-background: rgba(0, 0, 0, 0.6);
+    --media-control-hover-background: rgba(0, 0, 0, 0.8);
+    border-radius: 2rem;
+}
 
+/* Force controls to be a single horizontal bar at the bottom */
+mux-player::part(controls-container) {
+    display: flex;
+    flex-direction: row !important;
+    /* Forces horizontal layout */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    bottom: 10px;
+    width: 94%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    height: 48px;
+}
+
+/* Slim down the seek bar/progress bar */
+mux-player::part(seek-live) {
+    margin: 0 10px;
+}
+
+/* Remove the "Vertical" stacking behavior on mobile */
+mux-player::part(center-controls) {
+    display: none !important;
+}
+
+/* Ensure chat messages don't overlap the new control bar */
+#inPlayerChat {
+    padding-bottom: 70px !important;
+}
 .player-msg-anim {
     animation: slideInRight 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     text-shadow: 0 1px 4px rgba(0,0,0,0.8);
