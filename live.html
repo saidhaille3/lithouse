@@ -621,16 +621,15 @@ filter: invert(1) brightness(2);
     <div class="flex flex-col lg:flex-row gap-6">
         
         <div class="flex-grow">
-            <div class="group relative bg-black rounded-[2rem] overflow-hidden shadow-2xl border border-black/10 dark:border-white/10">
-                
-                <mux-player
+     <div id="videoContainer" class="group relative bg-black rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-700 ease-in-out border border-black/10 dark:border-white/10" style="width: 100%; aspect-ratio: 16/9;">
+            <mux-player
+                    id="mainPlayer"
                     stream-type="live"
                     playback-id="TewjpLNLyv802huM3gVvXv4Nzs8XAUgdZXQ502NYQusmk"
                     metadata-video-title="Live Stream: Greenlight Sports"
                     primary-color="#10b981"
-                    class="w-full aspect-video shadow-2xl"
+                    class="w-full h-full shadow-2xl"
                 ></mux-player>
-
 
             </div>
 
@@ -658,6 +657,8 @@ mux-player {
     --media-control-hover-background: rgba(16, 185, 129, 0.2);
     --media-font-family: 'Inter', sans-serif;
     border-radius: 2rem;
+    background-color: transparent !important;
+
 }
 
 /* Glass effect for player controls on hover */
@@ -667,6 +668,14 @@ mux-player::part(controls) {
     border-radius: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
+/* This ensures the video 'bleeds' to the edges of your rounded container */
+mux-player::part(video) {
+    object-fit: cover; /* Use 'cover' to fill space, 'contain' to avoid cropping */
+    border-radius: 2rem; /* Matches your UI theme */
+}
+
+/* Prevents the black background of the player from showing through */
+
 
 </style>
 
@@ -1504,9 +1513,54 @@ window.openGameModal = async function(gameId) {
 
 
 </script>
+<script>
 
+// 1. Listen for the 'loadedmetadata' event from the Mux player
+    // THE SMART ENGINE
+    const player = document.getElementById('mainPlayer');
+    const container = document.getElementById('videoContainer');
+
+    player.addEventListener('loadedmetadata', () => {
+        const videoWidth = player.videoWidth;
+        const videoHeight = player.videoHeight;
+        
+        if (videoWidth && videoHeight) {
+            // Adjust the container to match the actual stream dimensions exactly
+            container.style.aspectRatio = `${videoWidth} / ${videoHeight}`;
+            console.log(`Engine: Viewport optimized for ${videoWidth}x${videoHeight}`);
+        }
+    });
+
+    // Fallback: If the stream cuts out or changes, keep the UI stable
+    player.addEventListener('emptied', () => {
+        container.style.aspectRatio = "16 / 9";
+    });
+
+</script>
 </body>
 
+<style>
+    /* 1. Targets the fullscreen button specifically to remove any background/outline */
+mux-player::part(fullscreen-button) {
+    background-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
 
+/* 2. Forces the icon to use your Greenlight Green even when focused */
+mux-player::part(fullscreen-button):focus,
+mux-player::part(fullscreen-button):active {
+    outline: none !important;
+    background-color: transparent !important;
+    color: #10b981 !important;
+}
+
+/* 3. Global fix: Removes the 'pink' focus ring from ALL player buttons */
+mux-player::part(control-button):focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4) !important;
+    /* Subtle green glow instead of pink */
+}
+</style>
 
 </html>
