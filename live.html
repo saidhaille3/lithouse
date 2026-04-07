@@ -718,19 +718,7 @@ filter: invert(1) brightness(2);
 <!-- ── Navigation ── -->
 
 <!-- ── Sidebar ── -->
-<div id="soundboard" class="fixed bottom-24 left-6 z-[100] w-64 ios-glass rounded-[2rem] p-4 shadow-2xl hidden transition-all">
-  <p class="text-[9px] font-black uppercase tracking-widest mb-3 opacity-40 dark:text-white">Soundboard</p>
-  <div class="grid grid-cols-2 gap-2">
-    <button onclick="playSound('airhorn')" class="bg-black/5 dark:bg-white/10 p-3 rounded-xl text-[10px] font-bold hover:bg-red-600 hover:text-white transition-all">📯 AIRHORN</button>
-    <button onclick="playSound('rimshot')" class="bg-black/5 dark:bg-white/10 p-3 rounded-xl text-[10px] font-bold hover:bg-red-600 hover:text-white transition-all">🥁 RIMSHOT</button>
-    <button onclick="playSound('hype')" class="bg-black/5 dark:bg-white/10 p-3 rounded-xl text-[10px] font-bold hover:bg-red-600 hover:text-white transition-all">🔥 HYPE</button>
-    <button onclick="playSound('fail')" class="bg-black/5 dark:bg-white/10 p-3 rounded-xl text-[10px] font-bold hover:bg-red-600 hover:text-white transition-all">📉 FAIL</button>
-  </div>
-</div>
 
-<button onclick="document.getElementById('soundboard').classList.toggle('hidden')" class="fixed bottom-6 left-6 z-[100] w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-  <i class="fa-solid fa-music text-white"></i>
-</button>
 
 <!-- ── Page Body ── -->
 <main class="pt-0 pb-16 px-4 md:px-6 max-w-[1400px] mx-auto">
@@ -829,10 +817,6 @@ filter: invert(1) brightness(2);
 
   </div>
 </main>
-<div class="flex gap-2 p-4 overflow-x-auto">
-  <button onclick="triggerGlobalSound('airhorn')" class="bg-red-600 text-white p-4 rounded-xl font-bold">📯 Airhorn</button>
-  <button onclick="triggerGlobalSound('laugh')" class="bg-blue-600 text-white p-4 rounded-xl font-bold">😂 Laugh</button>
-</div>
 
 <style>
   /* Status pill states */
@@ -882,29 +866,7 @@ filter: invert(1) brightness(2);
     }
 
 // Sound Assets Map
-const sounds = {
-  airhorn: new Audio('/audio/airhorn.mp3'),
-  rimshot: new Audio('/audio/rimshot.mp3'),
-  hype:    new Audio('/audio/hype.mp3'),
-  fail:    new Audio('/audio/fail.mp3')
-};
 
-function playSound(key) {
-  const sfx = sounds[key];
-  if (sfx) {
-    sfx.currentTime = 0; // Reset if clicked rapidly
-    sfx.play();
-    
-    // OPTIONAL: If you want CHAT to see you played a sound
-    if(socket && socket.readyState === WebSocket.OPEN) {
-       socket.send(JSON.stringify({
-         type: 'chat',
-         username: 'SYSTEM',
-         text: `📢 Triggered ${key.toUpperCase()}!`
-       }));
-    }
-  }
-}
 
 
   const CONFIG = {
@@ -1049,7 +1011,6 @@ function addChatMsg(name, text) {
     overlay.style.display = live ? 'none' : 'flex';
     vWrap.style.display   = live ? 'flex' : 'none';
     vCount.textContent    = (viewers || 0).toLocaleString();
-    sTitle.textContent    = title || CONFIG.streamTitle;
   }
 
   async function pollStatus() {
@@ -1091,13 +1052,6 @@ function addChatMsg(name, text) {
   //  Nav / Sidebar / Dark Mode
   // ─────────────────────────────────────────────
   
-function triggerGlobalSound(soundName) {
-  // Send the command to the server
-  socket.send(JSON.stringify({
-    type: 'sound',
-    file: soundName
-  }));
-}
 
 
 </script>
@@ -1212,6 +1166,9 @@ function toggleUserDashboard() {
             setTimeout(() => particle.remove(), 2500);
         }
     }
+function addSystemMsg(text) {
+    addChatMsg('SYSTEM', text);
+}
 
     // Sidebar toggle
 function toggleSidebar() {
@@ -1638,7 +1595,7 @@ setInterval(loadGames, 30000); // 30s refresh is better for live data
         <button class="px-4 py-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-[9px] font-black uppercase tracking-widest dark:text-white/40">NBA</button>
     </div>
 
-    <div class="flex-grow overflow-y-auto p-5 space-y-4 no-scrollbar">
+<div id="chatMessages" class="flex-grow overflow-y-auto p-5 space-y-4 no-scrollbar">
         <div class="flex gap-3">
             <div class="w-8 h-8 rounded-full bg-amber-500 flex-shrink-0 flex items-center justify-center text-[10px] font-black">JD</div>
             <div class="space-y-1">
@@ -1655,8 +1612,9 @@ setInterval(loadGames, 30000); // 30s refresh is better for live data
 
     <div class="p-4 border-t border-black/5 dark:border-white/10 bg-white/50 dark:bg-black/20 backdrop-blur-md rounded-b-[2.5rem]">
         <div class="relative">
-<input type="text" placeholder="" class="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl py-4 pl-5 pr-12 text-base font-medium tracking-widest outline-none focus:border-red-600 transition-colors dark:text-white">
-            <button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-red-600">
+<input id="chatInput" type="text" placeholder="" class="w-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl py-4 pl-5 pr-12 text-base font-medium tracking-widest outline-none focus:border-red-600 transition-colors dark:text-white">
+<!-- Change the send button inside #chatWindow -->
+<button onclick="sendMsg()" class="absolute right-2 top-1/2 translate-y-1/2 w-8 h-8 flex items-center justify-center text-red-600">
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
