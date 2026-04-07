@@ -299,7 +299,9 @@ filter: invert(1) brightness(2);
 <nav id="navbar" class="fixed top-0 w-full z-50 silver-nav px-2 py-4 flex justify-between items-center">
 <div class="flex items-center gap-4">
     <div class="relative w-9 h-9"> 
+    <a href="index.html" class="flex items-center space-x-3 group shrink-0">
         <img src="/images/logo.png" alt="The Greenlight Logo" class="transition-transform scale-150 origin-left translate-y-[4px] " />
+        </a>
     </div>
     
     
@@ -593,7 +595,7 @@ filter: invert(1) brightness(2);
 </div>
 
 
-</div><!-- Hero Section --><section id="heroSection" class="relative overflow-hidden min-h-[620px] max-h-[620px] sm:min-h-[700px] sm:max-h-[700px] md:min-h-[800px] md:max-h-[800px] lg:min-h-[900px] lg:max-h-[900px] bg-black"><div id="slide-1" class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-100" style="background-image: url('images/trade.jpeg');"></div>
+</div><!-- Hero Section --><section id="heroSection" class="relative overflow-hidden min-h-[620px] max-h-[620px] sm:min-h-[700px] sm:max-h-[700px] md:min-h-[800px] md:max-h-[800px] lg:min-h-[900px] lg:max-h-[900px] bg-black"><div id="slide-1" class="absolute inset-0 bg-contain bg-center transition-opacity repeat:none; duration-1000 opacity-100" style="background-image: url('images/finch.png');"></div>
   <div id="slide-2" class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-0"></div><div class="absolute inset-0 z-[5] bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="relative z-10 px-8 md:px-16 py-20 flex flex-col justify-end h-full text-white">
 
 <div id="heroContent" class="transition-all duration-700 opacity-100 translate-y-0">
@@ -618,12 +620,11 @@ filter: invert(1) brightness(2);
   </div>
 
   <h1 id="heroHeadline" class="text-5xl md:text-[7rem] font-black uppercase tracking-tighter  leading-[0.85] max-w-5xl drop-shadow-[0_10px_20px_rgba(0,0,0,1)]">
-    Ja'Marr Chase <br/><span class="text-white/30">to the Eagles</span>
+    Chris Finch Should Be<br/><span class="text-white/30">On The Hot Seat </span>
   </h1>
 
   <p id="heroSubhead" class="mt-6 text-xl md:text-2xl text-white font-bold max-w-2xl leading-tight drop-shadow-md">
-    A stunning WR swap changes the landscape of the NFC. The deep dive into the trade of the decade.
-  </p>
+Minnnesota Finds Itsself In The Same Spot Denver Was In Last Year. Will a Coaching Change Salvage a Sinking Seaon?  </p>
 
   <div class="mt-10 flex flex-wrap gap-5">
     <a href="#" class="inline-flex items-center gap-3 bg-white text-black text-[11px] font-black uppercase tracking-[0.2em] px-10 py-5 rounded-xl shadow-2xl hover:bg-red-600 hover:text-white transition-all duration-300 group">
@@ -682,7 +683,7 @@ filter: invert(1) brightness(2);
       <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 backdrop-blur-[2px]">
 
       <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 backdrop-blur-[2px]">
-        <a href="live.html" class="inline-block bg-white text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-2xl text-[10px] transform translate-y-4 group-hover:translate-y-0 transition-all hover:bg-red-600 hover:text-white">
+        <a href="live2.html" class="inline-block bg-white text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-2xl text-[10px] transform translate-y-4 group-hover:translate-y-0 transition-all hover:bg-red-600 hover:text-white">
           Watch Stream
         </a>
       </div>
@@ -758,7 +759,7 @@ filter: invert(1) brightness(2);
 <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/40 to-transparent p-8">
     <h3 class="text-white font-black text-2xl uppercase tracking-tighter mb-1">Top 10 Dunks – This Year</h3>
     <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-4">Insane dunks from across the leagues.</p>
-    <button onclick="openVideoModal('images/Dunk.mov', 'Top 10 Dunks', 'NBA Season Highlights')" 
+    <button onclick="openVideoModal('images/dunk.mov', 'Top 10 Dunks', 'NBA Season Highlights')" 
             class="bg-yellow-400 hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
         Watch Full Highlights
     </button>
@@ -1076,20 +1077,20 @@ function toggleUserDashboard() {
     const heroSlides = [
       {
         label: "BREAKING",
-        headline: "Ja'Marr Chase \nto the Eagles",
-        subhead: "A stunning WR swap changes the landscape of the NFC. The deep dive into the trade of the decade.",
-        image: "images/trade.jpeg"
+        headline: "Chris Finch Should be \nOn The Hot Seat",
+        subhead: "Minnnesota Finds Itsself In The Same Spot Denver Was In Last Year. Will a Coaching Change Salvage a Sinking Seaon?",
+        image: "images/finch.png"
       },
       {
         label: "NFL",
-        headline: "Stars on \nthe Move",
-        subhead: "Inside the blockbuster deals shaping the next phase of the 2026 offseason.",
+        headline: "2026 NBA Draft \nDeep Dive",
+        subhead: "Risers, Darkhorses, Blue Chip talent...ranking this year's class",
         image: "images/fa.jpeg"
       },
       {
         label: "ORIGINAL",
-        headline: "Art vs \nAlgorithm",
-        subhead: "In this episode, Sa'iid unpacks why some players just got it, and others are still trying to replicate it.",
+        headline: "Key To \Longjevity",
+        subhead: "Is It All In The Ankles ?",
         image: "images/rev.webp"
       }
     ];
