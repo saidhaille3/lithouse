@@ -670,6 +670,8 @@ mux-player::part(controls) {
 }
 /* This ensures the video 'bleeds' to the edges of your rounded container */
 mux-player::part(video) {
+
+
     object-fit: cover; /* Use 'cover' to fill space, 'contain' to avoid cropping */
     border-radius: 2rem; /* Matches your UI theme */
 }
@@ -718,6 +720,28 @@ mux-player::part(video) {
     .footer-text {
     font-family: 'Inter', sans-serif;
     letter-spacing: -0.01em;
+    /* 1. Targets the fullscreen button specifically to remove any background/outline */
+mux-player::part(fullscreen-button) {
+    background-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. Forces the icon to use your Greenlight Green even when focused */
+mux-player::part(fullscreen-button):focus,
+mux-player::part(fullscreen-button):active {
+    outline: none !important;
+    background-color: transparent !important;
+    color: #10b981 !important;
+}
+
+/* 3. Global fix: Removes the 'pink' focus ring from ALL player buttons */
+mux-player::part(control-button):focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4) !important;
+    /* Subtle green glow instead of pink */
+}
+
 </style>
 
 
@@ -1539,28 +1563,5 @@ window.openGameModal = async function(gameId) {
 </script>
 </body>
 
-<style>
-    /* 1. Targets the fullscreen button specifically to remove any background/outline */
-mux-player::part(fullscreen-button) {
-    background-color: transparent !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* 2. Forces the icon to use your Greenlight Green even when focused */
-mux-player::part(fullscreen-button):focus,
-mux-player::part(fullscreen-button):active {
-    outline: none !important;
-    background-color: transparent !important;
-    color: #10b981 !important;
-}
-
-/* 3. Global fix: Removes the 'pink' focus ring from ALL player buttons */
-mux-player::part(control-button):focus {
-    outline: none !important;
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4) !important;
-    /* Subtle green glow instead of pink */
-}
-</style>
 
 </html>
