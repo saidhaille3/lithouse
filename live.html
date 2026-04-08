@@ -418,7 +418,8 @@ filter: invert(1) brightness(2);
 </div>
 
 
-<!-- Sidebar --><div id="sidebar" class="fixed inset-y-0 right-0 w-[300px] bg-white/90 dark:bg-neutral-900/95 backdrop-blur-2xl z-[60] transform translate-x-full transition-transform duration-500 ease-in-out shadow-[-20px_0_50px_rgba(0,0,0,0.1)] border-l border-gray-200 dark:border-white/10">
+<!-- Sidebar -->
+<div id="sidebar" class="fixed inset-y-0 right-0 w-[300px] bg-white/90 dark:bg-neutral-900/95 backdrop-blur-2xl z-[60] transform translate-x-full transition-transform duration-500 ease-in-out shadow-[-20px_0_50px_rgba(0,0,0,0.1)] border-l border-gray-200 dark:border-white/10">
     <div class="flex justify-between items-center p-8 border-b border-gray-100 dark:border-white/10">
         <button onclick="toggleSidebar()" class="text-2xl text-black dark:text-white hover:rotate-90 transition-transform duration-300">&times;</button>
     </div>
@@ -429,53 +430,41 @@ filter: invert(1) brightness(2);
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
         </svg>
     </button>
-
-    <a href="#" class="group flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-gray-100">
-        <div class="flex items-center gap-4">
-            <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="w-10 h-10 object-contain" alt="NFL">
-            <span class="font-bold text-lg tracking-tight group-hover:translate-x-1 transition-transform dark:text-white">NFL</span>
-        </div>
-        <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:opacity-100 transition-opacity dark:text-white"></i>
+    <a href="#" class="group flex items-center justify-center p-3 rounded-2xl bg-gray-50 dark:bg-white/5 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/20 transition-all duration-300">
+        <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform" alt="NFL">
     </a>
-
-    <a href="#" class="group flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-gray-100">
-        <div class="flex items-center gap-4">
-            <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="w-10 h-10 object-contain" alt="NBA">
-            <span class="font-bold text-lg tracking-tight group-hover:translate-x-1 transition-transform dark:text-white">NBA</span>
-        </div>
-        <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:opacity-100 transition-opacity dark:text-white"></i>
+    
+    <a href="#" class="group flex items-center justify-center p-3 rounded-2xl bg-gray-50 dark:bg-white/5 hover:bg-blue-500/10 border border-transparent hover:border-blue-500/20 transition-all duration-300">
+        <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform" alt="NBA">
     </a>
-
-    <a href="#" class="group flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-transparent hover:border-gray-100">
-        <div class="flex items-center gap-4">
-            <img src="images/blogo.webp" class="w-10 h-10 object-contain" alt="UFC">
-            <span class="font-bold text-lg tracking-tight group-hover:translate-x-1 transition-transform dark:text-white">UFC</span>
-        </div>
-        <i class="fa-solid fa-chevron-right text-xs opacity-20 group-hover:opacity-100 transition-opacity dark:text-white"></i>
+    
+    <a href="#" class="group flex items-center justify-center p-3 rounded-2xl bg-gray-50 dark:bg-white/5 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all duration-300">
+        <img src="images/ufc.png" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform" alt="UFC">
     </a>
 
 <div class="mt-4 pt-6 border-t border-gray-100 dark:border-white/10 px-2 space-y-4">
-    <a href="#" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group">
-        <img src="images/aw.png" class="absolute inset-0 w-full h-full object-cover object-[60%_50%] transition-transform duration-500 group-hover:scale-105" alt="Ball-Verse">
-        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+    <a href="#" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group bg-black">
+        <img src="images/aw.png" 
+             class="absolute inset-0 w-full h-full object-contain p-1 transition-transform duration-500 group-hover:scale-105" 
+             alt="Ball-Verse">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300"></div>
     </a>
 
-<a href="#" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group">
-    <img src="images/gh.png" 
-         class="absolute inset-0 w-full h-full object-cover object-[center_40%]
- transition-transform duration-500 group-hover:scale-110" 
-         alt="Greenlight Huddle">
-    
-    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300"></div>
-</a>
-
-
+    <a href="spaces.html" class="relative block w-full aspect-[3/1] overflow-hidden rounded-2xl shadow-lg group bg-black">
+        <img src="images/gh.png" 
+             class="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" 
+             alt="Greenlight Huddle">
+        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300"></div>
+    </a>
 </div>
 
 </div>
 
 
-</div><!-- Score Scroller -->
+</div>
+
+
+<!-- Score Scroller -->
 
 
 <!-- Score Scroller --><div class="mt-16 z-40 overflow-x-auto whitespace-nowrap py-5 px-4 bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/10 no-scrollbar shadow-sm">
